@@ -29,6 +29,12 @@ ModelFactory = Callable[[], ForecastModel]
 # 交差検証に必要な最小の学習データ点数
 MIN_TRAIN_SIZE = 4
 
+# スコアを名乗るために最低限必要な検証点数
+#
+# 1点だけの誤差から出したMASEは、たまたま当たったか外れたかを表しているにすぎない。
+# それを「バックテスト精度」として画面に出すのは、無いはずの根拠を主張することになる。
+MIN_CV_OBSERVATIONS = 3
+
 # 比較対象のモデル（この順序が同点時の優先順位になる）
 DEFAULT_CANDIDATES: tuple[ModelFactory, ...] = (
     SimpleExponentialSmoothing,
@@ -79,7 +85,7 @@ def rolling_origin_mase(
     最大 horizon ヶ月先までの予測誤差を集計する。
 
     Returns:
-        平均スケール化絶対誤差。検証不能な場合は inf（選択されない）
+        平均スケール化絶対誤差。検証点が MIN_CV_OBSERVATIONS 未満なら inf（選択されない）
     """
     model = factory()
     absolute_errors: list[float] = []
@@ -92,7 +98,8 @@ def rolling_origin_mase(
         predictions = factory().fit(train).forecast(steps)
         absolute_errors.extend(np.abs(y[origin : origin + steps] - predictions).tolist())
 
-    if not absolute_errors:
+    # 検証点が少なすぎる場合はスコアとして扱わない（選択にも使わない）
+    if len(absolute_errors) < MIN_CV_OBSERVATIONS:
         return float("inf")
 
     # 定数系列ではナイーブ誤差が0になるためスケールしない
@@ -109,7 +116,9 @@ def select_best_model(
 ) -> ModelSelection:
     """交差検証でMASEが最小のモデルを選び、全データで再学習して返す
 
-    データ点数が交差検証に足りない場合は、最も頑健な単純指数平滑にフォールバックする。
+    検証点が足りずスコアを信用できない場合は、モデル比較そのものを行わず、
+    最も頑健な単純指数平滑にフォールバックして cv_error を None で返す。
+    「短い履歴でも一応スコアは出す」より「出せないと言う」ほうが誠実なため。
     """
     viable = [factory for factory in candidates if y.size >= factory().min_observations]
     if not viable:

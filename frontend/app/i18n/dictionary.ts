@@ -45,6 +45,8 @@ export const dictionary = {
     "chart.forecastOn": "予測を表示",
     "chart.forecastOff": "予測を隠す",
     "chart.monthsAhead": "予測期間",
+    "chart.historyLabel": "過去",
+    "chart.horizonLabel": "未来",
     "chart.months": "{n}ヶ月",
     "chart.amount": "金額",
     "chart.count": "件数",
@@ -59,6 +61,9 @@ export const dictionary = {
     "forecast.mase": "MASE {value}",
     "forecast.maseHint":
       "1.00 は「前月の値をそのまま使う」のと同等。小さいほど良い",
+    "forecast.noScore": "検証不可",
+    "forecast.noScoreHint":
+      "モデルを評価するには履歴が足りません（期間を広げると算出されます）",
     "forecast.trend": "トレンド分析",
     "forecast.modelHint": "系列ごとに交差検証で選ばれたモデル",
 
@@ -142,6 +147,8 @@ export const dictionary = {
     "chart.forecastOn": "Show forecast",
     "chart.forecastOff": "Hide forecast",
     "chart.monthsAhead": "Horizon",
+    "chart.historyLabel": "Past",
+    "chart.horizonLabel": "Ahead",
     "chart.months": "{n} mo",
     "chart.amount": "Amount",
     "chart.count": "Count",
@@ -156,6 +163,9 @@ export const dictionary = {
     "forecast.mase": "MASE {value}",
     "forecast.maseHint":
       "1.00 equals repeating last month's figure. Lower is better",
+    "forecast.noScore": "Not scored",
+    "forecast.noScoreHint":
+      "Too little history to validate the model — widen the period to get a score",
     "forecast.trend": "Trend analysis",
     "forecast.modelHint": "Chosen per series by cross-validation",
 

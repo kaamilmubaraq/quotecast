@@ -11,6 +11,37 @@ using a statistical forecasting engine implemented directly on NumPy (no Prophet
 
 ---
 
+## Screenshots
+
+**Dashboard.** Actuals are solid bars, the forecast is hatched, and the 95% prediction interval is
+drawn as a band — with the model that produced it, and how it scored against the naive benchmark,
+named directly underneath.
+
+![QuoteCast dashboard, light theme](docs/images/dashboard-light.png)
+
+**The same view in dark mode.** Light and dark are designed as peers, not one filtered from the other.
+
+![QuoteCast dashboard, dark theme](docs/images/dashboard-dark.png)
+
+**Quotation list.** A dense table built for someone working through it all day: status as a labelled
+badge, money in tabular figures, and a validity bar whose length is the days actually remaining.
+
+![Quotation list](docs/images/quotations-light.png)
+
+<details>
+<summary>More — dark list, English interface</summary>
+
+![Quotation list, dark theme](docs/images/quotations-dark.png)
+
+The whole interface runs in English too. Japanese is the default; English is a peer translation
+rather than a gloss, and the layouts hold in both.
+
+![Quotation list in English](docs/images/quotations-en.png)
+
+</details>
+
+---
+
 ## Overview
 
 QuoteCast is a full-stack quotation (見積もり) management system for a sales team:

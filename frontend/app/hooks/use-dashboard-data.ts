@@ -69,16 +69,26 @@ export function useDashboardData() {
     })) || [];
 
   // 予測ONのときは、予測の算出元となった実績データと予測データを1つの配列にまとめる
+  const historicalPoints: MonthlyData[] =
+    forecastData?.historical_data.map((item) => ({
+      month: item.year_month,
+      amount: item.actual_amount,
+      count: item.actual_count,
+      isForecast: false,
+      confidence: item.confidence,
+    })) ?? [];
+
+  // 予測区間の帯が実績の最終月から立ち上がるよう、幅ゼロの区間を置いておく。
+  // これが無いと帯が何もない所から斜めに現れる。
+  const lastHistorical = historicalPoints.at(-1);
+  if (lastHistorical) {
+    lastHistorical.interval = [lastHistorical.amount, lastHistorical.amount];
+  }
+
   const chartData: MonthlyData[] =
     showForecast && forecastData
       ? [
-          ...forecastData.historical_data.map((item) => ({
-            month: item.year_month,
-            amount: item.actual_amount,
-            count: item.actual_count,
-            isForecast: false,
-            confidence: item.confidence,
-          })),
+          ...historicalPoints,
           ...forecastData.predictions.map((item) => ({
             month: item.year_month,
             amount: item.predicted_amount,

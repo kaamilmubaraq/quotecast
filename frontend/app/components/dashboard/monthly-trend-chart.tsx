@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
   Area,
   Bar,
@@ -31,6 +32,23 @@ interface MonthlyTrendChartProps {
   backtestMase: number | null;
   onForecastToggle: () => void;
   onMonthsAheadChange: (months: number) => void;
+}
+
+/**
+ * 軸の上限を切りのいい値に丸める
+ *
+ * 実測値そのままを上限にすると ¥3366.8万 のような目盛りが並ぶ。
+ * 目盛り間隔が丸くなるように上限を決める。
+ */
+function niceAxisMax(value: number, intervals = 4): number {
+  if (value <= 0) return 0;
+  const rough = value / intervals;
+  const magnitude = 10 ** Math.floor(Math.log10(rough));
+  const normalized = rough / magnitude;
+  const step =
+    (normalized <= 1 ? 1 : normalized <= 2 ? 2 : normalized <= 5 ? 5 : 10) *
+    magnitude;
+  return step * intervals;
 }
 
 interface TooltipEntry {
@@ -156,16 +174,25 @@ function ForecastAttribution({
         <div className="mt-0.5 text-sm font-medium">{selectedModel || "—"}</div>
       </div>
 
-      {backtestMase !== null && (
-        <div title={t("forecast.maseHint")}>
-          <div className="text-[11px] uppercase tracking-wide text-muted-foreground">
-            {t("forecast.accuracy")}
-          </div>
-          <div className="mt-0.5 text-sm font-medium tabular">
-            {t("forecast.mase", { value: backtestMase.toFixed(2) })}
-          </div>
+      <div
+        title={
+          backtestMase !== null ? t("forecast.maseHint") : t("forecast.noScoreHint")
+        }
+      >
+        <div className="text-[11px] uppercase tracking-wide text-muted-foreground">
+          {t("forecast.accuracy")}
         </div>
-      )}
+        <div
+          className={cn(
+            "mt-0.5 text-sm font-medium tabular",
+            backtestMase === null && "text-muted-foreground",
+          )}
+        >
+          {backtestMase !== null
+            ? t("forecast.mase", { value: backtestMase.toFixed(2) })
+            : t("forecast.noScore")}
+        </div>
+      </div>
 
       {trendAnalysis && (
         <p className="flex items-start gap-1.5 text-xs text-muted-foreground sm:justify-self-end sm:text-right">
@@ -192,6 +219,16 @@ export function MonthlyTrendChart({
 }: MonthlyTrendChartProps) {
   const { t } = useI18n();
   const { compactCurrency, number } = useFormatters();
+
+  // 予測区間の上限まで軸に収める。実績だけで軸を決めると帯が上端で切れる
+  const amountMax = useMemo(
+    () =>
+      data.reduce(
+        (max, point) => Math.max(max, point.amount, point.interval?.[1] ?? 0),
+        0,
+      ),
+    [data],
+  );
 
   return (
     <section className="rounded-lg border border-border bg-card">
@@ -221,6 +258,9 @@ export function MonthlyTrendChart({
             {showForecast ? t("chart.forecastOff") : t("chart.forecastOn")}
           </button>
 
+          <span className="text-xs text-muted-foreground">
+            {t("chart.historyLabel")}
+          </span>
           <PeriodSelector
             currentPeriodType={periodType}
             currentRecentMonths={recentMonths}
@@ -229,28 +269,33 @@ export function MonthlyTrendChart({
           />
 
           {showForecast && (
-            <div
-              role="group"
-              aria-label={t("chart.monthsAhead")}
-              className="flex h-8 items-center gap-0.5 rounded-md border border-input p-0.5"
-            >
-              {[3, 6, 12].map((months) => (
-                <button
-                  key={months}
-                  type="button"
-                  onClick={() => onMonthsAheadChange(months)}
-                  aria-pressed={monthsAhead === months}
-                  className={cn(
-                    "rounded-[4px] px-2 py-1 text-xs font-medium tabular transition-colors duration-150",
-                    monthsAhead === months
-                      ? "bg-secondary text-foreground"
-                      : "text-muted-foreground hover:text-foreground",
-                  )}
-                >
-                  {t("chart.months", { n: months })}
-                </button>
-              ))}
-            </div>
+            <>
+              <span className="text-xs text-muted-foreground">
+                {t("chart.horizonLabel")}
+              </span>
+              <div
+                role="group"
+                aria-label={t("chart.monthsAhead")}
+                className="flex h-8 items-center gap-0.5 rounded-md border border-input p-0.5"
+              >
+                {[3, 6, 12].map((months) => (
+                  <button
+                    key={months}
+                    type="button"
+                    onClick={() => onMonthsAheadChange(months)}
+                    aria-pressed={monthsAhead === months}
+                    className={cn(
+                      "rounded-[4px] px-2 py-1 text-xs font-medium tabular transition-colors duration-150",
+                      monthsAhead === months
+                        ? "bg-secondary text-foreground"
+                        : "text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    {t("chart.months", { n: months })}
+                  </button>
+                ))}
+              </div>
+            </>
           )}
         </div>
       </header>
@@ -319,6 +364,8 @@ export function MonthlyTrendChart({
                   tickLine={false}
                   axisLine={false}
                   width={64}
+                  domain={[0, amountMax > 0 ? niceAxisMax(amountMax) : "auto"]}
+                  tickCount={5}
                   tickFormatter={(value: number) => compactCurrency(value)}
                 />
                 <YAxis

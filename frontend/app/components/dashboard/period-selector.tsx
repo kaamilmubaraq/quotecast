@@ -52,7 +52,7 @@ export default function PeriodSelector({
     <>
       <div
         role="group"
-        aria-label={t("chart.monthsAhead")}
+        aria-label={t("chart.historyLabel")}
         className="flex h-8 items-center gap-0.5 rounded-md border border-input p-0.5"
       >
         {RANGE_OPTIONS.map((months) => (

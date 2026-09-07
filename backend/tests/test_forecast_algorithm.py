@@ -197,6 +197,26 @@ def test_rolling_origin_mase_is_infinite_when_no_origin_can_be_evaluated() -> No
     assert rolling_origin_mase(DampedHolt, short, horizon=2, min_train=2) == float("inf")
 
 
+def test_a_score_from_a_single_observation_is_not_reported() -> None:
+    """検証点が1つだけのMASEは偶然でしかないので、スコアとして扱わない
+
+    5点 + min_train=4 では起点が1つしか取れず、誤差も1つしか出ない。
+    それを「バックテスト精度」と呼ぶと、無い根拠を主張することになる。
+    """
+    barely_enough = np.array([10.0, 12.0, 11.0, 13.0, 12.0])
+
+    assert rolling_origin_mase(SimpleExponentialSmoothing, barely_enough, horizon=3) == float(
+        "inf"
+    )
+
+
+def test_model_selection_reports_no_score_when_validation_is_too_thin() -> None:
+    selection = select_best_model(np.array([10.0, 12.0, 11.0, 13.0, 12.0]), horizon=3)
+
+    assert selection.cv_error is None
+    assert selection.name == SimpleExponentialSmoothing.name
+
+
 def test_select_best_model_returns_a_fitted_model_and_its_score() -> None:
     selection = select_best_model(RISING, horizon=3)
 

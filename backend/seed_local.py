@@ -38,6 +38,39 @@ STATUSES = [
 ]
 
 
+# 未決着の見積もりが有効期限を過ぎたまま残らないようにする日数
+OPEN_WINDOW_DAYS = 60
+
+
+def resolve_validity(
+    status: EstimateStatus, issue_date: date, today: date
+) -> tuple[EstimateStatus, date]:
+    """ステータスと有効期限の辻褄を合わせる
+
+    「下書きのまま期限切れ」という見積もりが並ぶのは実際の営業では起こらない。
+    直近に出した未決着の見積もりは期限を将来に置き、
+    それより古い未決着のものは期限切れとして扱う。
+
+    Returns:
+        (ステータス, 有効期限)
+    """
+    settled = (EstimateStatus.ACCEPTED, EstimateStatus.REJECTED)
+    if status in settled:
+        # 決着済みは当時の期限のままでよい
+        return status, issue_date + timedelta(days=30)
+
+    if status is EstimateStatus.EXPIRED:
+        return status, issue_date + timedelta(days=30)
+
+    age_days = (today - issue_date).days
+    if age_days > OPEN_WINDOW_DAYS:
+        # 古いまま動いていない見積もりは期限切れ
+        return EstimateStatus.EXPIRED, issue_date + timedelta(days=30)
+
+    # 進行中の見積もり。期限が近いものから余裕のあるものまで散らす
+    return status, today + timedelta(days=random.randint(1, 45))
+
+
 def clear(session: Session, include_all: bool = False) -> int:
     """Delete seeded quotations. Line items go with them via cascade.
 
@@ -89,11 +122,13 @@ def seed(session: Session, categories: list[ItemCategory]) -> int:
 
         for j in range(monthly_count):
             issue_date = month.replace(day=random.randint(1, max(1, max_day)))
+            status = random.choice(STATUSES)
+            status, expiry_date = resolve_validity(status, issue_date, today)
             estimate = Estimate(
                 estimate_number=f"{SEED_PREFIX}{month:%Y%m}-{j + 1:04d}",
-                status=random.choice(STATUSES),
+                status=status,
                 issue_date=issue_date,
-                expiry_date=issue_date + timedelta(days=30),
+                expiry_date=expiry_date,
                 project_name=f"{random.choice(PROJECTS)} フェーズ{i % 4 + 1}",
                 customer_name=random.choice(CUSTOMERS),
                 in_charge_name=random.choice(STAFF),
