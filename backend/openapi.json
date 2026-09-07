@@ -1,0 +1,1558 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "FastAPI",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/categories": {
+      "get": {
+        "tags": [
+          "categories"
+        ],
+        "summary": "カテゴリ一覧取得",
+        "operationId": "get_categories_api_categories_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCategoriesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエスト内容が不正です。"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リソースが見つかりません。"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエストを処理できません。"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "System Error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "システム管理者にお問い合わせください。"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "categories"
+        ],
+        "summary": "カテゴリ作成",
+        "operationId": "create_category_api_categories_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCategoryResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエスト内容が不正です。"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リソースが見つかりません。"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエストを処理できません。"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "System Error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "システム管理者にお問い合わせください。"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/categories/{category_id}": {
+      "put": {
+        "tags": [
+          "categories"
+        ],
+        "summary": "カテゴリ更新",
+        "operationId": "update_category_api_categories__category_id__put",
+        "parameters": [
+          {
+            "name": "category_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Category Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCategoryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateCategoryResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエスト内容が不正です。"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リソースが見つかりません。"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエストを処理できません。"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "System Error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "システム管理者にお問い合わせください。"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "categories"
+        ],
+        "summary": "カテゴリ削除",
+        "operationId": "delete_category_api_categories__category_id__delete",
+        "parameters": [
+          {
+            "name": "category_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Category Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエスト内容が不正です。"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リソースが見つかりません。"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエストを処理できません。"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "System Error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "システム管理者にお問い合わせください。"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/estimates": {
+      "get": {
+        "tags": [
+          "estimates"
+        ],
+        "summary": "見積もり一覧取得",
+        "operationId": "get_estimates_api_estimates_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetEstimatesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエスト内容が不正です。"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リソースが見つかりません。"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエストを処理できません。"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "System Error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "システム管理者にお問い合わせください。"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "estimates"
+        ],
+        "summary": "見積もり作成",
+        "operationId": "create_estimate_api_estimates_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEstimateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateEstimateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエスト内容が不正です。"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リソースが見つかりません。"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエストを処理できません。"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "System Error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "システム管理者にお問い合わせください。"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/estimates/{estimate_id}": {
+      "get": {
+        "tags": [
+          "estimates"
+        ],
+        "summary": "見積もり詳細情報取得",
+        "operationId": "get_estimate_api_estimates__estimate_id__get",
+        "parameters": [
+          {
+            "name": "estimate_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Estimate Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetEstimateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエスト内容が不正です。"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リソースが見つかりません。"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエストを処理できません。"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "System Error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "システム管理者にお問い合わせください。"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "estimates"
+        ],
+        "summary": "見積もり更新",
+        "operationId": "update_estimate_api_estimates__estimate_id__put",
+        "parameters": [
+          {
+            "name": "estimate_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Estimate Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateEstimateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateEstimateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエスト内容が不正です。"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リソースが見つかりません。"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエストを処理できません。"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "System Error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "システム管理者にお問い合わせください。"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "estimates"
+        ],
+        "summary": "見積もり削除",
+        "operationId": "delete_estimate_api_estimates__estimate_id__delete",
+        "parameters": [
+          {
+            "name": "estimate_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Estimate Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエスト内容が不正です。"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リソースが見つかりません。"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエストを処理できません。"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "System Error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "システム管理者にお問い合わせください。"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/dashboards/summary": {
+      "get": {
+        "tags": [
+          "dashboards"
+        ],
+        "summary": "ダッシュボード集計取得",
+        "operationId": "get_dashboard_summary_api_dashboards_summary_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardSummaryResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "System Error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "システム管理者にお問い合わせください。"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/dashboards/trends": {
+      "get": {
+        "tags": [
+          "dashboards"
+        ],
+        "summary": "見積もり推移（月別）取得",
+        "operationId": "get_dashboard_trends_api_dashboards_trends_get",
+        "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "開始日 (未指定の場合は6ヶ月前)",
+              "title": "Start Date"
+            },
+            "description": "開始日 (未指定の場合は6ヶ月前)"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "終了日 (未指定の場合は今日)",
+              "title": "End Date"
+            },
+            "description": "終了日 (未指定の場合は今日)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardGraphResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエスト内容が不正です。"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエストを処理できません。"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "System Error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "システム管理者にお問い合わせください。"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/forecasts/monthly": {
+      "get": {
+        "tags": [
+          "forecasts"
+        ],
+        "summary": "月別需要予測取得",
+        "operationId": "get_monthly_forecast_api_forecasts_monthly_get",
+        "parameters": [
+          {
+            "name": "months_back",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 24,
+              "minimum": 1,
+              "description": "過去何ヶ月分のデータを使うか",
+              "default": 6,
+              "title": "Months Back"
+            },
+            "description": "過去何ヶ月分のデータを使うか"
+          },
+          {
+            "name": "months_ahead",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 12,
+              "minimum": 1,
+              "description": "何ヶ月先まで予測するか",
+              "default": 3,
+              "title": "Months Ahead"
+            },
+            "description": "何ヶ月先まで予測するか"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonthlyForecastResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエスト内容が不正です。"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエストを処理できません。"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "System Error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "システム管理者にお問い合わせください。"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateCategoryRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "CreateCategoryRequest"
+      },
+      "CreateCategoryResponse": {
+        "properties": {
+          "category": {
+            "$ref": "#/components/schemas/ItemCategoryRead"
+          }
+        },
+        "type": "object",
+        "required": [
+          "category"
+        ],
+        "title": "CreateCategoryResponse"
+      },
+      "CreateEstimateRequest": {
+        "properties": {
+          "project_name": {
+            "type": "string",
+            "title": "Project Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "project_name"
+        ],
+        "title": "CreateEstimateRequest"
+      },
+      "CreateEstimateResponse": {
+        "properties": {
+          "estimate": {
+            "$ref": "#/components/schemas/EstimateRead"
+          }
+        },
+        "type": "object",
+        "required": [
+          "estimate"
+        ],
+        "title": "CreateEstimateResponse"
+      },
+      "DashboardGraphResponse": {
+        "properties": {
+          "graph_items": {
+            "items": {
+              "$ref": "#/components/schemas/GraphItem"
+            },
+            "type": "array",
+            "title": "Graph Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "graph_items"
+        ],
+        "title": "DashboardGraphResponse"
+      },
+      "DashboardSummaryResponse": {
+        "properties": {
+          "total_count": {
+            "type": "integer",
+            "title": "Total Count"
+          },
+          "current_month_count": {
+            "type": "integer",
+            "title": "Current Month Count"
+          },
+          "total_amount": {
+            "type": "integer",
+            "title": "Total Amount"
+          },
+          "average_amount": {
+            "type": "integer",
+            "title": "Average Amount"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total_count",
+          "current_month_count",
+          "total_amount",
+          "average_amount"
+        ],
+        "title": "DashboardSummaryResponse"
+      },
+      "EstimateItemCreate": {
+        "properties": {
+          "item_name": {
+            "type": "string",
+            "title": "Item Name",
+            "description": "品名・摘要"
+          },
+          "price": {
+            "type": "integer",
+            "title": "Price",
+            "description": "単価"
+          },
+          "quantity": {
+            "type": "integer",
+            "title": "Quantity",
+            "description": "数量"
+          },
+          "category_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Category Id",
+            "description": "カテゴリID"
+          }
+        },
+        "type": "object",
+        "required": [
+          "item_name",
+          "price",
+          "quantity",
+          "category_id"
+        ],
+        "title": "EstimateItemCreate"
+      },
+      "EstimateItemRead": {
+        "properties": {
+          "item_name": {
+            "type": "string",
+            "title": "Item Name",
+            "description": "品名・摘要"
+          },
+          "price": {
+            "type": "integer",
+            "title": "Price",
+            "description": "単価"
+          },
+          "quantity": {
+            "type": "integer",
+            "title": "Quantity",
+            "description": "数量"
+          },
+          "category_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Category Id",
+            "description": "カテゴリID"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "subtotal": {
+            "type": "integer",
+            "title": "Subtotal"
+          },
+          "category": {
+            "$ref": "#/components/schemas/ItemCategoryRead"
+          }
+        },
+        "type": "object",
+        "required": [
+          "item_name",
+          "price",
+          "quantity",
+          "category_id",
+          "id",
+          "subtotal",
+          "category"
+        ],
+        "title": "EstimateItemRead"
+      },
+      "EstimateListItem": {
+        "properties": {
+          "estimate_number": {
+            "type": "string",
+            "title": "Estimate Number",
+            "description": "見積書番号"
+          },
+          "status": {
+            "$ref": "#/components/schemas/EstimateStatus"
+          },
+          "issue_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Issue Date",
+            "description": "発行日"
+          },
+          "expiry_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Expiry Date",
+            "description": "有効期限"
+          },
+          "project_name": {
+            "type": "string",
+            "title": "Project Name",
+            "description": "件名"
+          },
+          "customer_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Customer Name",
+            "description": "顧客名"
+          },
+          "in_charge_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "In Charge Name",
+            "description": "担当者名"
+          },
+          "remarks": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Remarks"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "total_amount": {
+            "type": "integer",
+            "title": "Total Amount",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "estimate_number",
+          "status",
+          "expiry_date",
+          "project_name",
+          "id"
+        ],
+        "title": "EstimateListItem"
+      },
+      "EstimateRead": {
+        "properties": {
+          "estimate_number": {
+            "type": "string",
+            "title": "Estimate Number",
+            "description": "見積書番号"
+          },
+          "status": {
+            "$ref": "#/components/schemas/EstimateStatus"
+          },
+          "issue_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Issue Date",
+            "description": "発行日"
+          },
+          "expiry_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Expiry Date",
+            "description": "有効期限"
+          },
+          "project_name": {
+            "type": "string",
+            "title": "Project Name",
+            "description": "件名"
+          },
+          "customer_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Customer Name",
+            "description": "顧客名"
+          },
+          "in_charge_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "In Charge Name",
+            "description": "担当者名"
+          },
+          "remarks": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Remarks"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/EstimateItemRead"
+            },
+            "type": "array",
+            "title": "Items",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "estimate_number",
+          "status",
+          "expiry_date",
+          "project_name",
+          "id"
+        ],
+        "title": "EstimateRead"
+      },
+      "EstimateStatus": {
+        "type": "string",
+        "enum": [
+          "draft",
+          "sent",
+          "accepted",
+          "rejected",
+          "expired"
+        ],
+        "title": "EstimateStatus"
+      },
+      "ForecastHistoricalItem": {
+        "properties": {
+          "year_month": {
+            "type": "string",
+            "title": "Year Month"
+          },
+          "actual_amount": {
+            "type": "integer",
+            "title": "Actual Amount"
+          },
+          "actual_count": {
+            "type": "integer",
+            "title": "Actual Count"
+          },
+          "predicted_amount": {
+            "type": "integer",
+            "title": "Predicted Amount"
+          },
+          "predicted_count": {
+            "type": "integer",
+            "title": "Predicted Count"
+          },
+          "confidence": {
+            "type": "number",
+            "title": "Confidence"
+          }
+        },
+        "type": "object",
+        "required": [
+          "year_month",
+          "actual_amount",
+          "actual_count",
+          "predicted_amount",
+          "predicted_count",
+          "confidence"
+        ],
+        "title": "ForecastHistoricalItem"
+      },
+      "ForecastPredictionItem": {
+        "properties": {
+          "year_month": {
+            "type": "string",
+            "title": "Year Month"
+          },
+          "predicted_amount": {
+            "type": "integer",
+            "title": "Predicted Amount"
+          },
+          "predicted_count": {
+            "type": "integer",
+            "title": "Predicted Count"
+          },
+          "confidence": {
+            "type": "number",
+            "title": "Confidence"
+          }
+        },
+        "type": "object",
+        "required": [
+          "year_month",
+          "predicted_amount",
+          "predicted_count",
+          "confidence"
+        ],
+        "title": "ForecastPredictionItem"
+      },
+      "GetCategoriesResponse": {
+        "properties": {
+          "categories": {
+            "items": {
+              "$ref": "#/components/schemas/ItemCategoryRead"
+            },
+            "type": "array",
+            "title": "Categories"
+          }
+        },
+        "type": "object",
+        "required": [
+          "categories"
+        ],
+        "title": "GetCategoriesResponse"
+      },
+      "GetEstimateResponse": {
+        "properties": {
+          "estimate": {
+            "$ref": "#/components/schemas/EstimateRead"
+          }
+        },
+        "type": "object",
+        "required": [
+          "estimate"
+        ],
+        "title": "GetEstimateResponse"
+      },
+      "GetEstimatesResponse": {
+        "properties": {
+          "estimates": {
+            "items": {
+              "$ref": "#/components/schemas/EstimateListItem"
+            },
+            "type": "array",
+            "title": "Estimates"
+          }
+        },
+        "type": "object",
+        "required": [
+          "estimates"
+        ],
+        "title": "GetEstimatesResponse"
+      },
+      "GraphItem": {
+        "properties": {
+          "month": {
+            "type": "string",
+            "title": "Month"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          },
+          "amount": {
+            "type": "integer",
+            "title": "Amount"
+          }
+        },
+        "type": "object",
+        "required": [
+          "month",
+          "count",
+          "amount"
+        ],
+        "title": "GraphItem"
+      },
+      "ItemCategoryRead": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "グループ名"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "is_deleted": {
+            "type": "boolean",
+            "title": "Is Deleted"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "id",
+          "is_deleted"
+        ],
+        "title": "ItemCategoryRead"
+      },
+      "MonthlyForecastResponse": {
+        "properties": {
+          "historical_data": {
+            "items": {
+              "$ref": "#/components/schemas/ForecastHistoricalItem"
+            },
+            "type": "array",
+            "title": "Historical Data"
+          },
+          "predictions": {
+            "items": {
+              "$ref": "#/components/schemas/ForecastPredictionItem"
+            },
+            "type": "array",
+            "title": "Predictions"
+          },
+          "trend_analysis": {
+            "type": "string",
+            "title": "Trend Analysis"
+          }
+        },
+        "type": "object",
+        "required": [
+          "historical_data",
+          "predictions",
+          "trend_analysis"
+        ],
+        "title": "MonthlyForecastResponse"
+      },
+      "UpdateCategoryRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "UpdateCategoryRequest"
+      },
+      "UpdateCategoryResponse": {
+        "properties": {
+          "category": {
+            "$ref": "#/components/schemas/ItemCategoryRead"
+          }
+        },
+        "type": "object",
+        "required": [
+          "category"
+        ],
+        "title": "UpdateCategoryResponse"
+      },
+      "UpdateEstimateRequest": {
+        "properties": {
+          "estimate_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimate Number"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EstimateStatus"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "issue_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Issue Date"
+          },
+          "project_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Name"
+          },
+          "customer_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Customer Name"
+          },
+          "in_charge_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "In Charge Name"
+          },
+          "remarks": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Remarks"
+          },
+          "expiry_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expiry Date"
+          },
+          "items": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/EstimateItemCreate"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "title": "UpdateEstimateRequest"
+      },
+      "UpdateEstimateResponse": {
+        "properties": {
+          "estimate": {
+            "$ref": "#/components/schemas/EstimateRead"
+          }
+        },
+        "type": "object",
+        "required": [
+          "estimate"
+        ],
+        "title": "UpdateEstimateResponse"
+      }
+    }
+  }
+}

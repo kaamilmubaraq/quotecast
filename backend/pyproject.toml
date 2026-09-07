@@ -1,0 +1,83 @@
+[project]
+name = "quotecast-backend"
+version = "0.1.0"
+description = "QuoteCast backend - quotation management and demand forecasting API"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "alembic>=1.17.1",
+    "fastapi[standard]>=0.120.4",
+    "numpy>=2.2.1",
+    "psycopg2-binary>=2.9.11",
+    "pydantic>=2.12.3",
+    "pydantic-settings>=2.11.0",
+    "python-dateutil>=2.9.0.post0",
+    "sqlmodel>=0.0.27",
+]
+
+[dependency-groups]
+dev = [
+    "coverage>=7.11.0",
+    "mypy>=1.18.2",
+    "pytest>=8.4.2",
+    "ruff>=0.14.3",
+    "types-python-dateutil>=2.9.0.20251115",
+]
+
+
+[tool.mypy]
+ignore_missing_imports = true
+exclude = '(build|\.venv)'
+plugins = "pydantic.mypy"
+follow_imports = "silent"
+warn_redundant_casts = true
+warn_unused_ignores = true
+check_untyped_defs = true
+
+[tool.ruff]
+line-length = 99
+exclude = [
+    "migrations/versions",
+    ".venv",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4",  # flake8-comprehensions
+]
+ignore = [
+    "B028",  # No explicit `stacklevel` keyword argument found
+    "E731",  # Do not assign a `lambda` expression, use a `def`
+    "E741",  # Ambiguous variable name (for lambda expression)
+    "E501",  # Line too long
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+    "W191",  # indentation contains tabs
+    "B904", # raise ... from ... になっていない場合のエラーを無視
+]
+unfixable = [
+    "F401",   # unused import
+    "F841",   # unused variable
+    "ERA001", # commented out code
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+warn_untyped_fields = true
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 100
