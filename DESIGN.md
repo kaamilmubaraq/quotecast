@@ -18,21 +18,28 @@ filter applied to the other.
 
 ### Surfaces
 
+The dark theme follows GitHub's model: a neutral near-black with only a trace of blue, no violet
+cast. Panels lift by surface step, never by tint shift.
+
 | Token | Light | Dark | Use |
 | --- | --- | --- | --- |
-| `--background` | `#f5f7fa` | `#0b1020` | Page ground, one step below panels |
-| `--card` | `#ffffff` | `#131a2c` | Panels, tables, tiles |
-| `--popover` | `#ffffff` | `#161e33` | Menus, tooltips, dialogs |
-| `--secondary` | `#eef1f6` | `#1e2740` | Inset controls, hover fills, bar tracks |
-| `--border` | `#e2e7ef` | `#253049` | Hairlines |
+| `--background` | `#f6f8fa` | `#0d1117` | Page ground, one step below panels |
+| `--card` | `#ffffff` | `#151b23` | Panels, tables, tiles |
+| `--popover` | `#ffffff` | `#1c2128` | Menus, tooltips, dialogs |
+| `--secondary` | `#eff2f5` | `#21262d` | Inset controls, hover fills, bar tracks |
+| `--border` | `#d1d9e0` | `#30363d` | Hairlines |
+| `--sidebar` | `#ffffff` | `#010409` | Navigation rail (darkest surface in dark) |
 
 Panels separate from the page by a **surface step plus a hairline**, not by shadow. Shadows appear
 only on genuinely floating layers (tooltip, popover).
 
 ### Accent
 
-`--primary` (`#4f46e5` light / `#8b90ff` dark) is spent on exactly three things: the primary
+`--primary` (`#0969da` light / `#2f81f7` dark) is spent on exactly three things: the primary
 action, the current selection, and focus. It is never used decoratively.
+
+The accent is a plain blue rather than a branded hue. On a tool someone stares at all day, an accent
+that competes with the data is a cost, not a personality.
 
 ### Status
 
@@ -42,9 +49,13 @@ Five states, each with a foreground and a surface token, always rendered as a la
 | --- | --- |
 | 下書き / Draft | `--status-draft` on `--status-draft-surface` |
 | 送付済み / Sent | `--status-sent` on `--status-sent-surface` |
-| 承認済み / Accepted | `--status-accepted` on `--status-accepted-surface` |
-| 却下 / Rejected | `--status-rejected` on `--status-rejected-surface` |
+| 受注 / Won | `--status-accepted` on `--status-accepted-surface` |
+| 失注 / Lost | `--status-rejected` on `--status-rejected-surface` |
 | 期限切れ / Expired | `--status-expired` on `--status-expired-surface` |
+
+Labels are defined once in the dictionary and read through `lib/status.ts`. The filter, the status
+menu and the table badge all render from that single source, so the same status cannot be called
+two different things on two screens.
 
 **Colour never carries status alone.** Every status badge shows its label, and the validity bar
 pairs its colour with a written day count. Mapping lives in `frontend/app/lib/status.ts`, where

@@ -121,7 +121,7 @@ export const EstimateList = ({ searchQuery, filters }: EstimateListProps) => {
             <AlertDialogCancel>{t("action.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteConfirm}
-              className="bg-destructive hover:bg-destructive/90"
+              className="bg-destructive text-white hover:bg-destructive/90 dark:bg-destructive/60 dark:hover:bg-destructive/70"
             >
               {t("action.delete")}
             </AlertDialogAction>

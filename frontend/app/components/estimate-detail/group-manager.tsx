@@ -132,7 +132,7 @@ export function GroupManager({
                           onClick={saveEdit}
                           className="h-7 w-7 p-0"
                         >
-                          <Check className="w-3.5 h-3.5 text-green-600" />
+                          <Check className="w-3.5 h-3.5 text-status-accepted" />
                         </Button>
                         <Button
                           variant="ghost"
@@ -140,7 +140,7 @@ export function GroupManager({
                           onClick={cancelEdit}
                           className="h-7 w-7 p-0"
                         >
-                          <X className="w-3.5 h-3.5 text-gray-600" />
+                          <X className="w-3.5 h-3.5 text-muted-foreground" />
                         </Button>
                       </>
                     ) : (
@@ -152,7 +152,7 @@ export function GroupManager({
                           onClick={() => startEdit(group)}
                           className="h-7 w-7 p-0"
                         >
-                          <Pencil className="w-3.5 h-3.5 text-blue-600" />
+                          <Pencil className="w-3.5 h-3.5 text-primary" />
                         </Button>
                         <Button
                           variant="ghost"

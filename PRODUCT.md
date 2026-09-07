@@ -44,7 +44,7 @@ how it scored against a naive benchmark, and how wide the uncertainty is.
 - Japanese B2B sales. Currency is JPY, tax is 10% consumption tax, documents are 見積書.
 - Quotations carry: quotation number, customer name, project name, person in charge, issue date,
   expiry date, remarks, and line items organised into orderable groups.
-- Status lifecycle: 下書き (draft) → 送付済み (sent) → 承認済み (accepted) / 却下 (rejected).
+- Status lifecycle: 下書き (draft) → 送付済み (sent) → 受注 (won) / 失注 (lost), plus 期限切れ (expired).
 - The PDF is the deliverable that leaves the building; it is previewed in-browser before sending.
 - Forecasting operates on monthly aggregates, looking back up to 24 months and up to 12 months ahead.
 - The app is bilingual: Japanese is the default interface language, with an English toggle.

@@ -12,114 +12,115 @@
 
 :root {
   /* 面: ページは一段沈んだ灰、カードは白。パネルの境界を影ではなく面の差で出す */
-  --background: #f5f7fa;
-  --foreground: #1a1f36;
+  --background: #f6f8fa;
+  --foreground: #1f2328;
   --card: #ffffff;
-  --card-foreground: #1a1f36;
+  --card-foreground: #1f2328;
   --popover: #ffffff;
-  --popover-foreground: #1a1f36;
+  --popover-foreground: #1f2328;
 
   /* 主要操作の色。装飾には使わず、主要ボタン・選択中・フォーカスのみ */
-  --primary: #4f46e5;
+  --primary: #0969da;
   --primary-foreground: #ffffff;
 
-  --secondary: #eef1f6;
-  --secondary-foreground: #2b3350;
-  --muted: #eef1f6;
-  --muted-foreground: #616c85;
-  --accent: #eef1f6;
-  --accent-foreground: #2b3350;
-  --destructive: #d33b3b;
+  --secondary: #eff2f5;
+  --secondary-foreground: #24292f;
+  --muted: #eff2f5;
+  --muted-foreground: #59636e;
+  --accent: #eff2f5;
+  --accent-foreground: #24292f;
+  --destructive: #cf222e;
   --destructive-foreground: #ffffff;
 
-  --border: #e2e7ef;
-  --input: #d8dfe9;
-  --ring: #4f46e5;
+  --border: #d1d9e0;
+  --input: #d1d9e0;
+  --ring: #0969da;
 
   /* ステータス: 色は必ずラベルか記号と併用する（色だけで意味を運ばない） */
-  --status-draft: #64748b;
-  --status-draft-surface: #f1f5f9;
-  --status-sent: #2563eb;
-  --status-sent-surface: #eff4ff;
-  --status-accepted: #047857;
-  --status-accepted-surface: #ecfdf5;
-  --status-rejected: #be123c;
-  --status-rejected-surface: #fff1f3;
-  --status-expired: #b45309;
-  --status-expired-surface: #fffbeb;
+  --status-draft: #59636e;
+  --status-draft-surface: #eff2f5;
+  --status-sent: #0969da;
+  --status-sent-surface: #ddf4ff;
+  --status-accepted: #1a7f37;
+  --status-accepted-surface: #dafbe1;
+  --status-rejected: #cf222e;
+  --status-rejected-surface: #ffebe9;
+  --status-expired: #9a6700;
+  --status-expired-surface: #fff8c5;
 
-  /* グラフ: 実績と予測は同じ色相で、実績は実線・予測は破線とハッチで区別する */
-  --chart-actual: #4f46e5;
-  --chart-actual-soft: #c7d2fe;
-  --chart-forecast: #7c74f0;
-  --chart-band: rgba(99, 91, 240, 0.16);
-  --chart-count: #0d9488;
-  --chart-grid: #e6ebf2;
-  --chart-axis: #7a8699;
+  /* グラフ: 実績と予測は同じ色相で、実績は塗り・予測はハッチで区別する */
+  --chart-actual: #0969da;
+  --chart-actual-soft: #b6e3ff;
+  --chart-forecast: #54aeff;
+  --chart-band: rgba(9, 105, 218, 0.14);
+  --chart-count: #bc4c00;
+  --chart-grid: #d8dee4;
+  --chart-axis: #59636e;
 
   --radius: 0.5rem;
 
   --sidebar: #ffffff;
-  --sidebar-foreground: #1a1f36;
-  --sidebar-primary: #4f46e5;
+  --sidebar-foreground: #1f2328;
+  --sidebar-primary: #0969da;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #f1f4f9;
-  --sidebar-accent-foreground: #2b3350;
-  --sidebar-border: #e2e7ef;
-  --sidebar-ring: #4f46e5;
+  --sidebar-accent: #eff2f5;
+  --sidebar-accent-foreground: #24292f;
+  --sidebar-border: #d1d9e0;
+  --sidebar-ring: #0969da;
 }
 
 .dark {
-  --background: #0b1020;
-  --foreground: #e7ecf7;
-  --card: #131a2c;
-  --card-foreground: #e7ecf7;
-  --popover: #161e33;
-  --popover-foreground: #e7ecf7;
+  /* GitHub のダークに倣った中間色寄りの黒。色相を持たせず、青みだけをわずかに残す */
+  --background: #0d1117;
+  --foreground: #e6edf3;
+  --card: #151b23;
+  --card-foreground: #e6edf3;
+  --popover: #1c2128;
+  --popover-foreground: #e6edf3;
 
-  --primary: #8b90ff;
-  --primary-foreground: #10142a;
+  --primary: #2f81f7;
+  --primary-foreground: #ffffff;
 
-  --secondary: #1e2740;
-  --secondary-foreground: #d5dcec;
-  --muted: #1a2237;
-  --muted-foreground: #94a1bb;
-  --accent: #1e2740;
-  --accent-foreground: #d5dcec;
-  --destructive: #f2635f;
-  --destructive-foreground: #1a0f10;
+  --secondary: #21262d;
+  --secondary-foreground: #e6edf3;
+  --muted: #21262d;
+  --muted-foreground: #8b949e;
+  --accent: #21262d;
+  --accent-foreground: #e6edf3;
+  --destructive: #f85149;
+  --destructive-foreground: #ffffff;
 
-  --border: #253049;
-  --input: #2c3854;
-  --ring: #8b90ff;
+  --border: #30363d;
+  --input: #3d444d;
+  --ring: #2f81f7;
 
-  --status-draft: #9aa8bf;
-  --status-draft-surface: #1c2437;
-  --status-sent: #7aa7ff;
-  --status-sent-surface: #14203a;
-  --status-accepted: #4ade9f;
-  --status-accepted-surface: #0e2a22;
-  --status-rejected: #ff8095;
-  --status-rejected-surface: #2c1420;
-  --status-expired: #f5be5c;
-  --status-expired-surface: #2a2011;
+  --status-draft: #8b949e;
+  --status-draft-surface: #21262d;
+  --status-sent: #4493f8;
+  --status-sent-surface: #121d2f;
+  --status-accepted: #3fb950;
+  --status-accepted-surface: #12261e;
+  --status-rejected: #ff7b72;
+  --status-rejected-surface: #25171c;
+  --status-expired: #d29922;
+  --status-expired-surface: #272115;
 
-  --chart-actual: #8b90ff;
-  --chart-actual-soft: #3b3f80;
-  --chart-forecast: #a5a3ff;
-  --chart-band: rgba(139, 144, 255, 0.2);
-  --chart-count: #3ec9b6;
-  --chart-grid: #222c44;
-  --chart-axis: #8090ab;
+  --chart-actual: #2f81f7;
+  --chart-actual-soft: #1f4b8f;
+  --chart-forecast: #58a6ff;
+  --chart-band: rgba(47, 129, 247, 0.18);
+  --chart-count: #db6d28;
+  --chart-grid: #21262d;
+  --chart-axis: #8b949e;
 
-  --sidebar: #0e1426;
-  --sidebar-foreground: #e7ecf7;
-  --sidebar-primary: #8b90ff;
-  --sidebar-primary-foreground: #10142a;
-  --sidebar-accent: #1b2338;
-  --sidebar-accent-foreground: #d5dcec;
-  --sidebar-border: #222c44;
-  --sidebar-ring: #8b90ff;
+  --sidebar: #010409;
+  --sidebar-foreground: #e6edf3;
+  --sidebar-primary: #2f81f7;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #21262d;
+  --sidebar-accent-foreground: #e6edf3;
+  --sidebar-border: #30363d;
+  --sidebar-ring: #2f81f7;
 }
 
 @theme inline {

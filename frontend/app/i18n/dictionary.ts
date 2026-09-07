@@ -29,8 +29,8 @@ export const dictionary = {
 
     "status.draft": "下書き",
     "status.sent": "送付済み",
-    "status.accepted": "承認済み",
-    "status.rejected": "却下",
+    "status.accepted": "受注",
+    "status.rejected": "失注",
     "status.expired": "期限切れ",
 
     "dashboard.title": "ダッシュボード",
@@ -126,8 +126,8 @@ export const dictionary = {
 
     "status.draft": "Draft",
     "status.sent": "Sent",
-    "status.accepted": "Accepted",
-    "status.rejected": "Rejected",
+    "status.accepted": "Won",
+    "status.rejected": "Lost",
     "status.expired": "Expired",
 
     "dashboard.title": "Dashboard",

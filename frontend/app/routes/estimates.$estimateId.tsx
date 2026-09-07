@@ -32,7 +32,7 @@ export default function EstimateDetailPage() {
   }
 
   return (
-    <div className="h-screen bg-slate-50 flex flex-col overflow-hidden">
+    <div className="flex h-[calc(100svh-3.25rem)] flex-col overflow-hidden bg-background lg:h-screen">
       <PageHeader
         title="見積もり詳細"
         description={estimate.project_name}
@@ -41,8 +41,8 @@ export default function EstimateDetailPage() {
       />
 
       <div className="flex-1 overflow-hidden">
-        <div className="container mx-auto px-4 py-6 h-full">
-          <div className="grid lg:grid-cols-2 gap-6 h-full">
+        <div className="mx-auto h-full max-w-[88rem] px-4 py-4 sm:px-6">
+          <div className="grid h-full gap-4 lg:grid-cols-2">
             <div className="h-full overflow-hidden">
               <EstimatePdfPreview pdfUrl={pdfUrl} filename={pdfFilename} />
             </div>

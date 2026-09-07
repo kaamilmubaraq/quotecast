@@ -81,7 +81,7 @@ export const DeleteEstimateConfirmDialog = ({
           <AlertDialogAction
             onClick={handleDeleteConfirm}
             disabled={isPending}
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            className="bg-destructive text-white hover:bg-destructive/90 dark:bg-destructive/60 dark:hover:bg-destructive/70"
           >
             {isPending ? "削除中..." : "削除"}
           </AlertDialogAction>
