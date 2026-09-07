@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Body, Depends
+from fastapi import APIRouter, Body, Depends, Query
 
 from app.exceptions.exception import Exception500, ExceptionBase
 from app.exceptions.generate import generate_error_responses
@@ -24,10 +24,11 @@ estimate_router = APIRouter()
     responses=generate_error_responses([400, 404, 422, 500]),
 )
 async def get_estimates(
+    search: str | None = Query(None, description="顧客名・件名・見積書番号での部分一致検索"),
     service: EstimateService = Depends(get_estimate_service),
 ) -> GetEstimatesResponse:
     try:
-        return service.get_estimates()
+        return service.get_estimates(search=search)
     except ExceptionBase as e:
         raise e
     except Exception as e:
@@ -46,6 +47,24 @@ async def get_estimate(
 ) -> GetEstimateResponse:
     try:
         return service.get_estimate(estimate_id)
+    except ExceptionBase as e:
+        raise e
+    except Exception as e:
+        raise Exception500(e)
+
+
+@estimate_router.post(
+    "/{estimate_id}/duplicate",
+    summary="見積もり複製",
+    response_model=CreateEstimateResponse,
+    responses=generate_error_responses([400, 404, 422, 500]),
+)
+async def duplicate_estimate(
+    estimate_id: UUID,
+    service: EstimateService = Depends(get_estimate_service),
+) -> CreateEstimateResponse:
+    try:
+        return service.duplicate_estimate(estimate_id)
     except ExceptionBase as e:
         raise e
     except Exception as e:

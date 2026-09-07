@@ -2,7 +2,7 @@ from datetime import date
 from typing import Optional, Sequence
 from uuid import UUID
 
-from sqlmodel import Session, desc, false, select
+from sqlmodel import Session, col, desc, false, or_, select
 
 from db.models import Estimate, EstimateCreate, EstimateItem, EstimateItemCreate, EstimateUpdate
 
@@ -37,10 +37,24 @@ class EstimateGW:
 
         return f"{prefix}-{sequence:04d}"
 
-    def get_estimates(self, include_deleted: bool = False) -> Sequence[Estimate]:
+    def get_estimates(
+        self, include_deleted: bool = False, search: Optional[str] = None
+    ) -> Sequence[Estimate]:
         statement = select(Estimate)
         if not include_deleted:
             statement = statement.where(Estimate.is_deleted == false())
+
+        # 顧客名・件名・見積書番号のいずれかに部分一致（大文字小文字は区別しない）
+        if search:
+            pattern = f"%{search.strip()}%"
+            statement = statement.where(
+                or_(
+                    col(Estimate.customer_name).ilike(pattern),
+                    col(Estimate.project_name).ilike(pattern),
+                    col(Estimate.estimate_number).ilike(pattern),
+                )
+            )
+
         statement = statement.order_by(desc(Estimate.created_at))
 
         return self.session.exec(statement).unique().all()

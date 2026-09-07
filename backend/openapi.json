@@ -313,6 +313,26 @@
         ],
         "summary": "見積もり一覧取得",
         "operationId": "get_estimates_api_estimates_get",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "顧客名・件名・見積書番号での部分一致検索",
+              "title": "Search"
+            },
+            "description": "顧客名・件名・見積書番号での部分一致検索"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -373,14 +393,14 @@
         "summary": "見積もり作成",
         "operationId": "create_estimate_api_estimates_post",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CreateEstimateRequest"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -659,6 +679,79 @@
         }
       }
     },
+    "/api/estimates/{estimate_id}/duplicate": {
+      "post": {
+        "tags": [
+          "estimates"
+        ],
+        "summary": "見積もり複製",
+        "operationId": "duplicate_estimate_api_estimates__estimate_id__duplicate_post",
+        "parameters": [
+          {
+            "name": "estimate_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Estimate Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateEstimateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエスト内容が不正です。"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リソースが見つかりません。"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエストを処理できません。"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "System Error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "システム管理者にお問い合わせください。"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/dashboards/summary": {
       "get": {
         "tags": [
@@ -861,10 +954,154 @@
           }
         }
       }
+    },
+    "/api/analytics/summary": {
+      "get": {
+        "tags": [
+          "analytics"
+        ],
+        "summary": "営業分析サマリー取得",
+        "operationId": "get_analytics_summary_api_analytics_summary_get",
+        "parameters": [
+          {
+            "name": "expiring_within_days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 90,
+              "minimum": 1,
+              "description": "期限切れ警告の日数",
+              "default": 14,
+              "title": "Expiring Within Days"
+            },
+            "description": "期限切れ警告の日数"
+          },
+          {
+            "name": "top_customer_limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 20,
+              "minimum": 1,
+              "description": "上位顧客の件数",
+              "default": 5,
+              "title": "Top Customer Limit"
+            },
+            "description": "上位顧客の件数"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalyticsSummaryResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエスト内容が不正です。"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "リクエストを処理できません。"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "System Error",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "システム管理者にお問い合わせください。"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "AnalyticsSummaryResponse": {
+        "properties": {
+          "status_breakdown": {
+            "items": {
+              "$ref": "#/components/schemas/StatusBreakdownItem"
+            },
+            "type": "array",
+            "title": "Status Breakdown"
+          },
+          "win_rate": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Win Rate"
+          },
+          "pipeline_amount": {
+            "type": "integer",
+            "title": "Pipeline Amount",
+            "default": 0
+          },
+          "pipeline_count": {
+            "type": "integer",
+            "title": "Pipeline Count",
+            "default": 0
+          },
+          "won_amount": {
+            "type": "integer",
+            "title": "Won Amount",
+            "default": 0
+          },
+          "average_deal_size": {
+            "type": "integer",
+            "title": "Average Deal Size",
+            "default": 0
+          },
+          "top_customers": {
+            "items": {
+              "$ref": "#/components/schemas/TopCustomerItem"
+            },
+            "type": "array",
+            "title": "Top Customers",
+            "default": []
+          },
+          "expiring_soon": {
+            "items": {
+              "$ref": "#/components/schemas/ExpiringEstimateItem"
+            },
+            "type": "array",
+            "title": "Expiring Soon",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "status_breakdown"
+        ],
+        "title": "AnalyticsSummaryResponse"
+      },
       "CreateCategoryRequest": {
         "properties": {
           "name": {
@@ -1220,6 +1457,57 @@
         ],
         "title": "EstimateStatus"
       },
+      "ExpiringEstimateItem": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "estimate_number": {
+            "type": "string",
+            "title": "Estimate Number"
+          },
+          "project_name": {
+            "type": "string",
+            "title": "Project Name"
+          },
+          "customer_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Customer Name"
+          },
+          "expiry_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Expiry Date"
+          },
+          "days_remaining": {
+            "type": "integer",
+            "title": "Days Remaining"
+          },
+          "amount": {
+            "type": "integer",
+            "title": "Amount"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "estimate_number",
+          "project_name",
+          "expiry_date",
+          "days_remaining",
+          "amount"
+        ],
+        "title": "ExpiringEstimateItem"
+      },
       "ForecastHistoricalItem": {
         "properties": {
           "year_month": {
@@ -1275,6 +1563,16 @@
           "confidence": {
             "type": "number",
             "title": "Confidence"
+          },
+          "lower_amount": {
+            "type": "integer",
+            "title": "Lower Amount",
+            "default": 0
+          },
+          "upper_amount": {
+            "type": "integer",
+            "title": "Upper Amount",
+            "default": 0
           }
         },
         "type": "object",
@@ -1397,6 +1695,22 @@
           "trend_analysis": {
             "type": "string",
             "title": "Trend Analysis"
+          },
+          "selected_model": {
+            "type": "string",
+            "title": "Selected Model",
+            "default": ""
+          },
+          "backtest_mase": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Backtest Mase"
           }
         },
         "type": "object",
@@ -1406,6 +1720,51 @@
           "trend_analysis"
         ],
         "title": "MonthlyForecastResponse"
+      },
+      "StatusBreakdownItem": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/EstimateStatus"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          },
+          "amount": {
+            "type": "integer",
+            "title": "Amount"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "count",
+          "amount"
+        ],
+        "title": "StatusBreakdownItem"
+      },
+      "TopCustomerItem": {
+        "properties": {
+          "customer_name": {
+            "type": "string",
+            "title": "Customer Name"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          },
+          "amount": {
+            "type": "integer",
+            "title": "Amount"
+          }
+        },
+        "type": "object",
+        "required": [
+          "customer_name",
+          "count",
+          "amount"
+        ],
+        "title": "TopCustomerItem"
       },
       "UpdateCategoryRequest": {
         "properties": {

@@ -25,7 +25,7 @@ import numpy as np
 from dateutil.relativedelta import relativedelta
 from pydantic import BaseModel
 
-from algorithm.evaluation import ModelSelection, select_best_model
+from algorithm.evaluation import select_best_model
 from algorithm.smoothing import FloatArray
 
 
@@ -49,6 +49,18 @@ class PredictionResult(BaseModel):
     confidence: float
     lower_amount: int
     upper_amount: int
+
+
+class ForecastOutcome(BaseModel):
+    """予測結果と、その予測を出したモデルの情報
+
+    どのモデルがなぜ選ばれたかを画面に出せるようにするため、
+    予測値と一緒にモデル名と交差検証スコアを返す。
+    """
+
+    predictions: list[PredictionResult]
+    selected_model: str
+    backtest_mase: float | None = None
 
 
 class TrendAnalysisResult(BaseModel):
@@ -79,6 +91,9 @@ MIN_RELATIVE_SLOPE = 0.001
 HIGH_VOLATILITY_CV = 0.3
 
 INSUFFICIENT_DATA_MESSAGE = "データ不足のため、トレンド分析ができません。"
+
+# 実績が足りずモデルを選べなかった場合に返すモデル名
+INSUFFICIENT_MODEL_NAME = "データ不足"
 
 
 class ForecastAlgorithm:
@@ -151,10 +166,8 @@ class ForecastAlgorithm:
     # 予測
     # =========================================================================
 
-    def generate_predictions(
-        self, historical: list[HistoricalDataPoint], months_ahead: int
-    ) -> list[PredictionResult]:
-        """需要予測を生成する
+    def run(self, historical: list[HistoricalDataPoint], months_ahead: int) -> ForecastOutcome:
+        """需要予測を実行し、予測値と採用モデルをまとめて返す
 
         金額と件数はそれぞれ独立にモデル選択を行う。
         両者は単価を通じて相関するが、実績から直接学習するほうが
@@ -163,9 +176,6 @@ class ForecastAlgorithm:
         Args:
             historical: 過去データのリスト（昇順）
             months_ahead: 予測する月数
-
-        Returns:
-            予測結果のリスト
         """
         months = self._future_months(historical, months_ahead)
         fitting = self.build_fitting_series(historical)
@@ -175,7 +185,11 @@ class ForecastAlgorithm:
 
         # 実績が無い（すべて0を含む）場合は予測できない
         if amounts.size < 2 or not np.any(amounts):
-            return [self._empty_prediction(month) for month in months]
+            return ForecastOutcome(
+                predictions=[self._empty_prediction(month) for month in months],
+                selected_model=INSUFFICIENT_MODEL_NAME,
+                backtest_mase=None,
+            )
 
         amount_selection = select_best_model(amounts, months_ahead)
         count_selection = select_best_model(counts, months_ahead)
@@ -210,17 +224,18 @@ class ForecastAlgorithm:
                     upper_amount=int(round(point + margin)),
                 )
             )
-        return predictions
 
-    def select_models(
+        return ForecastOutcome(
+            predictions=predictions,
+            selected_model=amount_selection.name,
+            backtest_mase=amount_selection.cv_error,
+        )
+
+    def generate_predictions(
         self, historical: list[HistoricalDataPoint], months_ahead: int
-    ) -> ModelSelection | None:
-        """金額系列について選択されたモデルを返す（デモ・検証用）"""
-        fitting = self.build_fitting_series(historical)
-        amounts = np.array([point.actual_amount for point in fitting], dtype=np.float64)
-        if amounts.size < 2 or not np.any(amounts):
-            return None
-        return select_best_model(amounts, months_ahead)
+    ) -> list[PredictionResult]:
+        """需要予測の予測値だけを返す（`run` の薄いラッパー）"""
+        return self.run(historical, months_ahead).predictions
 
     # =========================================================================
     # トレンド分析

@@ -421,15 +421,19 @@ def test_a_rising_series_is_forecast_above_its_last_value() -> None:
     assert predictions[0].predicted_amount > 300_000
 
 
-def test_select_models_reports_the_chosen_model() -> None:
-    selection = ForecastAlgorithm().select_models(history([100, 200, 300, 400, 500, 600]), 3)
+def test_run_reports_the_chosen_model() -> None:
+    outcome = ForecastAlgorithm().run(history([100, 200, 300, 400, 500, 600]), 3)
 
-    assert selection is not None
-    assert selection.name != ""
+    assert outcome.selected_model != ""
+    assert outcome.backtest_mase is not None
+    assert len(outcome.predictions) == 3
 
 
-def test_select_models_returns_none_without_usable_history() -> None:
-    assert ForecastAlgorithm().select_models(history([0, 0, 0]), 3) is None
+def test_run_reports_insufficient_data_without_usable_history() -> None:
+    outcome = ForecastAlgorithm().run(history([0, 0, 0]), 3)
+
+    assert outcome.selected_model == "データ不足"
+    assert outcome.backtest_mase is None
 
 
 # ---------------------------------------------------------------------------

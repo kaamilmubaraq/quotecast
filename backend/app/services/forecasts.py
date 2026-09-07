@@ -41,9 +41,7 @@ class ForecastService:
             )
             curr += relativedelta(months=1)
 
-        predictions = self.algorithm.generate_predictions(
-            historical=historical, months_ahead=months_ahead
-        )
+        outcome = self.algorithm.run(historical=historical, months_ahead=months_ahead)
         trend = self.algorithm.analyze_trend(historical)
 
         # 実績データは予測値を0、信頼度を1.0として返す（グラフ側で予測データと結合するため）
@@ -65,10 +63,14 @@ class ForecastService:
                     predicted_amount=p.predicted_amount,
                     predicted_count=p.predicted_count,
                     confidence=p.confidence,
+                    lower_amount=p.lower_amount,
+                    upper_amount=p.upper_amount,
                 )
-                for p in predictions
+                for p in outcome.predictions
             ],
             trend_analysis=trend.description,
+            selected_model=outcome.selected_model,
+            backtest_mase=outcome.backtest_mase,
         )
 
 

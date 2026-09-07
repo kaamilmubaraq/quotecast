@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from app.router.analytics import analytics_router
 from app.router.categories import category_router
 from app.router.dashboard import dashboard_router
 from app.router.estimates import estimate_router
@@ -30,4 +31,9 @@ app.include_router(
     router=forecast_router,
     prefix=BASE_PREFIX + "/forecasts",
     tags=["forecasts"],
+)
+app.include_router(
+    router=analytics_router,
+    prefix=BASE_PREFIX + "/analytics",
+    tags=["analytics"],
 )

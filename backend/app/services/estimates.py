@@ -15,7 +15,13 @@ from app.schemas.estimates import (
     UpdateEstimateRequest,
     UpdateEstimateResponse,
 )
-from db.models import EstimateCreate, EstimateRead, EstimateUpdate
+from db.models import (
+    EstimateCreate,
+    EstimateItemCreate,
+    EstimateRead,
+    EstimateStatus,
+    EstimateUpdate,
+)
 from db.session import get_session
 
 
@@ -28,8 +34,8 @@ class EstimateService:
         self.session = session
         self.estimate_gw = EstimateGW(session)
 
-    def get_estimates(self) -> GetEstimatesResponse:
-        estimates = self.estimate_gw.get_estimates()
+    def get_estimates(self, search: str | None = None) -> GetEstimatesResponse:
+        estimates = self.estimate_gw.get_estimates(search=search)
 
         estimate_list_items = []
         for e in estimates:
@@ -66,6 +72,43 @@ class EstimateService:
         self.session.commit()
         self.session.refresh(estimate)
         return CreateEstimateResponse(estimate=EstimateRead.model_validate(estimate))
+
+    def duplicate_estimate(self, estimate_id: UUID) -> CreateEstimateResponse:
+        """既存の見積もりを下書きとして複製する
+
+        番号は新規採番し、発行日は本日、有効期限は30日後に引き直す。
+        金額の再入力が要らないよう、明細はそのまま引き継ぐ。
+        """
+        source = self.estimate_gw.get_estimate(estimate_id)
+        if not source:
+            raise Exception404(f"見積もりID {estimate_id} が見つかりません")
+
+        estimate_create = EstimateCreate(
+            estimate_number=self.estimate_gw.generate_estimate_number(),
+            status=EstimateStatus.DRAFT,
+            project_name=f"{source.project_name}（コピー）",
+            customer_name=source.customer_name,
+            in_charge_name=source.in_charge_name,
+            issue_date=date.today(),
+            expiry_date=date.today() + timedelta(days=30),
+            remarks=source.remarks,
+        )
+        duplicated = self.estimate_gw.create_estimate(estimate_create)
+
+        for item in source.items:
+            self.estimate_gw.create_estimate_item(
+                duplicated.id,
+                EstimateItemCreate(
+                    item_name=item.item_name,
+                    price=item.price,
+                    quantity=item.quantity,
+                    category_id=item.category_id,
+                ),
+            )
+
+        self.session.commit()
+        self.session.refresh(duplicated)
+        return CreateEstimateResponse(estimate=EstimateRead.model_validate(duplicated))
 
     def update_estimate(
         self, estimate_id: UUID, request: UpdateEstimateRequest
