@@ -28,10 +28,22 @@ badge, money in tabular figures, and a validity bar whose length is the days act
 
 ![Quotation list](docs/images/quotations-light.png)
 
+**Sales analytics.** Win rate, pipeline value, status breakdown, value by customer, and the
+quotations about to expire — the manager's view of the same data.
+
+![Sales analytics](docs/images/analytics-dark.png)
+
+**Quotation detail.** The line-item editor on the right, the print-ready 見積書 PDF rendered live on
+the left. Subtotal, 10% consumption tax and total stay in step as you edit.
+
+![Quotation detail with PDF preview](docs/images/detail-dark.png)
+
 <details>
 <summary>More — dark list, English interface</summary>
 
 ![Quotation list, dark theme](docs/images/quotations-dark.png)
+
+![Sales analytics, light theme](docs/images/analytics-light.png)
 
 The whole interface runs in English too. Japanese is the default; English is a peer translation
 rather than a gloss, and the layouts hold in both.

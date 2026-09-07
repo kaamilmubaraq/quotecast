@@ -27,10 +27,22 @@
 
 ![見積もり一覧](docs/images/quotations-light.png)
 
+**営業分析。** 受注率・進行中の金額・ステータス内訳・顧客別金額・期限が近い見積もり。
+同じデータをマネージャー視点で見る画面です。
+
+![営業分析](docs/images/analytics-dark.png)
+
+**見積もり詳細。** 右で明細を編集し、左に印刷可能な見積書PDFを即座に描画します。
+小計・消費税(10%)・合計は編集に追従します。
+
+![見積もり詳細とPDFプレビュー](docs/images/detail-dark.png)
+
 <details>
 <summary>その他 — ダークの一覧、英語表示</summary>
 
 ![見積もり一覧（ダーク）](docs/images/quotations-dark.png)
+
+![営業分析（ライト）](docs/images/analytics-light.png)
 
 英語表示にも対応しています。日本語が既定で、英語は日本語の直訳ではなく同格の翻訳として扱い、
 どちらでもレイアウトが崩れないようにしています。

@@ -231,6 +231,23 @@
   }
 }
 
+@layer base {
+  /*
+   * 数値入力のスピナーを消す
+   * 明細行のように列が狭い場所では、スピナーが幅を食って金額が読めなくなる
+   */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+}
+
 @layer utilities {
   /* 金額・件数など桁を比較する数字は必ず等幅数字にする */
   .tabular {

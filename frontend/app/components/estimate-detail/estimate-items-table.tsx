@@ -155,7 +155,7 @@ function SortableRow({
       </TableCell>
       <TableCell className="p-2">
         <div className="flex items-center justify-end gap-2">
-          <span className="text-sm font-medium tabular-nums text-right">
+          <span className="text-sm font-medium tabular text-right">
             ¥{item.subtotal.toLocaleString()}
           </span>
           {canRemove && (
@@ -225,11 +225,11 @@ export function EstimateItemsTable({
           <TableHeader className="bg-muted/50">
             <TableRow>
               <TableHead className="w-8"></TableHead>
-              <TableHead className="w-1/6 text-center">グループ</TableHead>
-              <TableHead className="w-1/3 text-center">品目</TableHead>
-              <TableHead className="w-1/6 text-center">数量</TableHead>
-              <TableHead className="w-1/6 text-center">単価</TableHead>
-              <TableHead className="w-1/6 text-center">金額</TableHead>
+              <TableHead className="w-[20%] text-center">グループ</TableHead>
+              <TableHead className="w-[26%] text-center">品目</TableHead>
+              <TableHead className="w-[12%] text-center">数量</TableHead>
+              <TableHead className="w-[20%] text-center">単価</TableHead>
+              <TableHead className="w-[22%] text-right">金額</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
