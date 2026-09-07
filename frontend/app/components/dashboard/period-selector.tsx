@@ -9,7 +9,11 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon, Settings2 } from "lucide-react";
 import { format } from "date-fns";
-import { ja } from "date-fns/locale";
+import { enUS, ja } from "date-fns/locale";
+import { useI18n } from "@/i18n";
+import { cn } from "@/lib/utils";
+
+const RANGE_OPTIONS = [3, 6, 12, 24];
 
 interface PeriodSelectorProps {
   currentPeriodType: "recent" | "range";
@@ -30,10 +34,9 @@ export default function PeriodSelector({
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
   const [open, setOpen] = useState(false);
-
-  const handleRecentMonths = (months: number) => {
-    onPeriodChange("recent", months);
-  };
+  const { t, locale } = useI18n();
+  const dateLocale = locale === "ja" ? ja : enUS;
+  const monthFormat = locale === "ja" ? "yyyy年M月" : "MMM yyyy";
 
   const handleRangeApply = () => {
     if (startDate && endDate) {
@@ -42,141 +45,135 @@ export default function PeriodSelector({
     }
   };
 
-  const isSelected = (months: number) => {
-    return currentPeriodType === "recent" && currentRecentMonths === months;
-  };
-
-  const isCustomSelected = currentPeriodType === "range";
+  const isSelected = (months: number) =>
+    currentPeriodType === "recent" && currentRecentMonths === months;
 
   return (
     <>
-      <div className="flex items-center gap-1 rounded-full bg-slate-100 p-1">
-        <span className="px-2 text-sm text-slate-500">過去</span>
-
-        <Button
-          variant={isSelected(3) ? "default" : "ghost"}
-          size="sm"
-          className="rounded-full"
-          onClick={() => handleRecentMonths(3)}
-        >
-          3ヶ月
-        </Button>
-        <Button
-          variant={isSelected(6) ? "default" : "ghost"}
-          size="sm"
-          className="rounded-full"
-          onClick={() => handleRecentMonths(6)}
-        >
-          6ヶ月
-        </Button>
-        <Button
-          variant={isSelected(12) ? "default" : "ghost"}
-          size="sm"
-          className="rounded-full"
-          onClick={() => handleRecentMonths(12)}
-        >
-          12ヶ月
-        </Button>
-        <Button
-          variant={isSelected(24) ? "default" : "ghost"}
-          size="sm"
-          className="rounded-full"
-          onClick={() => handleRecentMonths(24)}
-        >
-          24ヶ月
-        </Button>
+      <div
+        role="group"
+        aria-label={t("chart.monthsAhead")}
+        className="flex h-8 items-center gap-0.5 rounded-md border border-input p-0.5"
+      >
+        {RANGE_OPTIONS.map((months) => (
+          <button
+            key={months}
+            type="button"
+            onClick={() => onPeriodChange("recent", months)}
+            aria-pressed={isSelected(months)}
+            className={cn(
+              "rounded-[4px] px-2 py-1 text-xs font-medium tabular transition-colors duration-150",
+              isSelected(months)
+                ? "bg-secondary text-foreground"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
+            {t("chart.months", { n: months })}
+          </button>
+        ))}
       </div>
 
       {/* カスタム期間は独立したグループとして末尾に配置する（予測ON時は非表示） */}
       {!hideCustom && (
-        <div className="order-last flex items-center rounded-full bg-slate-100 p-1">
-          <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
-              <Button
-                variant={isCustomSelected ? "default" : "ghost"}
-                size="sm"
-                className="rounded-full"
-              >
-                <Settings2 className="w-4 h-4 mr-2" />
-                カスタム
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-[480px]" align="end">
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label className="text-sm font-semibold">期間指定</Label>
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <button
+              type="button"
+              aria-pressed={currentPeriodType === "range"}
+              className={cn(
+                "flex h-8 items-center gap-1.5 rounded-md border px-2.5 text-xs font-medium transition-colors duration-150",
+                currentPeriodType === "range"
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-input text-muted-foreground hover:bg-secondary hover:text-foreground",
+              )}
+            >
+              <Settings2 className="size-3.5" strokeWidth={2} />
+              {locale === "ja" ? "カスタム" : "Custom"}
+            </button>
+          </PopoverTrigger>
+          <PopoverContent className="w-[min(28rem,calc(100vw-2rem))]" align="end">
+            <div className="space-y-4">
+              <Label className="text-sm font-semibold">
+                {locale === "ja" ? "期間指定" : "Custom range"}
+              </Label>
+
+              <div className="flex items-end gap-3">
+                <div className="min-w-0 flex-1 space-y-1.5">
+                  <Label className="text-xs text-muted-foreground">
+                    {locale === "ja" ? "開始月" : "From"}
+                  </Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="h-9 w-full justify-start bg-transparent text-left text-sm font-normal"
+                      >
+                        <CalendarIcon className="mr-2 size-4 shrink-0" />
+                        <span className="truncate">
+                          {startDate
+                            ? format(startDate, monthFormat, {
+                                locale: dateLocale,
+                              })
+                            : "—"}
+                        </span>
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={startDate}
+                        onSelect={setStartDate}
+                        locale={dateLocale}
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
 
-                <div className="flex items-center gap-4">
-                  <div className="flex-1 space-y-2 min-w-[180px]">
-                    <Label className="text-xs">開始月</Label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="w-full justify-start text-left font-normal text-sm h-10 bg-transparent"
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
-                          <span className="truncate">
-                            {startDate
-                              ? format(startDate, "yyyy年M月", { locale: ja })
-                              : "選択"}
-                          </span>
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={startDate}
-                          onSelect={setStartDate}
-                          locale={ja}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
+                <span className="pb-2 text-muted-foreground">–</span>
 
-                  <div className="text-muted-foreground mt-7 text-lg">〜</div>
-
-                  <div className="flex-1 space-y-2 min-w-[180px]">
-                    <Label className="text-xs">終了月</Label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="w-full justify-start text-left font-normal text-sm h-10 bg-transparent"
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
-                          <span className="truncate">
-                            {endDate
-                              ? format(endDate, "yyyy年M月", { locale: ja })
-                              : "選択"}
-                          </span>
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={endDate}
-                          onSelect={setEndDate}
-                          locale={ja}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
+                <div className="min-w-0 flex-1 space-y-1.5">
+                  <Label className="text-xs text-muted-foreground">
+                    {locale === "ja" ? "終了月" : "To"}
+                  </Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="h-9 w-full justify-start bg-transparent text-left text-sm font-normal"
+                      >
+                        <CalendarIcon className="mr-2 size-4 shrink-0" />
+                        <span className="truncate">
+                          {endDate
+                            ? format(endDate, monthFormat, {
+                                locale: dateLocale,
+                              })
+                            : "—"}
+                        </span>
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={endDate}
+                        onSelect={setEndDate}
+                        locale={dateLocale}
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
-
-                <Button
-                  onClick={handleRangeApply}
-                  disabled={!startDate || !endDate}
-                  className="w-full"
-                  size="sm"
-                >
-                  適用
-                </Button>
               </div>
-            </PopoverContent>
-          </Popover>
-        </div>
+
+              <Button
+                onClick={handleRangeApply}
+                disabled={!startDate || !endDate}
+                className="w-full"
+                size="sm"
+              >
+                {locale === "ja" ? "適用" : "Apply"}
+              </Button>
+            </div>
+          </PopoverContent>
+        </Popover>
       )}
     </>
   );

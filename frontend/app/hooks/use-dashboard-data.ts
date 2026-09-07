@@ -12,6 +12,8 @@ export interface MonthlyData {
   count: number;
   isForecast?: boolean;
   confidence?: number;
+  /** 95%予測区間の [下限, 上限]。実績月には無い */
+  interval?: [number, number];
 }
 
 export function useDashboardData() {
@@ -83,6 +85,7 @@ export function useDashboardData() {
             count: item.predicted_count,
             isForecast: true,
             confidence: item.confidence,
+            interval: [item.lower_amount, item.upper_amount] as [number, number],
           })),
         ]
       : monthlyData;
@@ -136,6 +139,8 @@ export function useDashboardData() {
     showForecast,
     monthsAhead,
     trendAnalysis: forecastData?.trend_analysis ?? "",
+    selectedModel: forecastData?.selected_model ?? "",
+    backtestMase: forecastData?.backtest_mase ?? null,
     handleForecastToggle,
     handleMonthsAheadChange,
   };

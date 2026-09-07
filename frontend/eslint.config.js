@@ -6,7 +6,7 @@ import tseslint from "typescript-eslint";
 
 export default [
   {
-    ignores: ["dist", ".react-router", "app/gen/**"],
+    ignores: ["dist", "build", ".react-router", "app/gen/**"],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,

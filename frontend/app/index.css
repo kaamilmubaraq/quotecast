@@ -3,81 +3,132 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * QuoteCast design tokens
+ *
+ * 値は必ずこのファイルで定義し、コンポーネント側に色を直接書かない。
+ * ライトとダークは同格に扱う（どちらかのついでではない）。
+ */
+
 :root {
-  /* Updated to modern, vibrant color palette with better contrast */
-  --background: oklch(0.99 0.002 240);
-  --foreground: oklch(0.09 0.01 240);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.09 0.01 240);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.09 0.01 240);
-  --primary: oklch(0.5 0.22 250);
-  --primary-foreground: oklch(0.99 0.002 240);
-  --secondary: oklch(0.96 0.01 250);
-  --secondary-foreground: oklch(0.2 0.05 250);
-  --muted: oklch(0.97 0.005 240);
-  --muted-foreground: oklch(0.7 0.015 240);
-  --accent: oklch(0.95 0.02 200);
-  --accent-foreground: oklch(0.2 0.05 250);
-  --destructive: oklch(0.55 0.22 25);
-  --destructive-foreground: oklch(0.99 0.002 240);
-  --border: oklch(0.92 0.01 240);
-  --input: oklch(0.92 0.01 240);
-  --ring: oklch(0.5 0.22 250);
-  --chart-1: oklch(0.55 0.22 250);
-  --chart-2: oklch(0.6 0.2 200);
-  --chart-3: oklch(0.65 0.18 280);
-  --chart-4: oklch(0.7 0.16 180);
-  --chart-5: oklch(0.75 0.14 320);
-  --radius: 0.75rem;
-  --sidebar: oklch(0.99 0.002 240);
-  --sidebar-foreground: oklch(0.09 0.01 240);
-  --sidebar-primary: oklch(0.5 0.22 250);
-  --sidebar-primary-foreground: oklch(0.99 0.002 240);
-  --sidebar-accent: oklch(0.96 0.01 250);
-  --sidebar-accent-foreground: oklch(0.2 0.05 250);
-  --sidebar-border: oklch(0.92 0.01 240);
-  --sidebar-ring: oklch(0.7 0.05 240);
+  /* 面: ページは一段沈んだ灰、カードは白。パネルの境界を影ではなく面の差で出す */
+  --background: #f5f7fa;
+  --foreground: #1a1f36;
+  --card: #ffffff;
+  --card-foreground: #1a1f36;
+  --popover: #ffffff;
+  --popover-foreground: #1a1f36;
+
+  /* 主要操作の色。装飾には使わず、主要ボタン・選択中・フォーカスのみ */
+  --primary: #4f46e5;
+  --primary-foreground: #ffffff;
+
+  --secondary: #eef1f6;
+  --secondary-foreground: #2b3350;
+  --muted: #eef1f6;
+  --muted-foreground: #616c85;
+  --accent: #eef1f6;
+  --accent-foreground: #2b3350;
+  --destructive: #d33b3b;
+  --destructive-foreground: #ffffff;
+
+  --border: #e2e7ef;
+  --input: #d8dfe9;
+  --ring: #4f46e5;
+
+  /* ステータス: 色は必ずラベルか記号と併用する（色だけで意味を運ばない） */
+  --status-draft: #64748b;
+  --status-draft-surface: #f1f5f9;
+  --status-sent: #2563eb;
+  --status-sent-surface: #eff4ff;
+  --status-accepted: #047857;
+  --status-accepted-surface: #ecfdf5;
+  --status-rejected: #be123c;
+  --status-rejected-surface: #fff1f3;
+  --status-expired: #b45309;
+  --status-expired-surface: #fffbeb;
+
+  /* グラフ: 実績と予測は同じ色相で、実績は実線・予測は破線とハッチで区別する */
+  --chart-actual: #4f46e5;
+  --chart-actual-soft: #c7d2fe;
+  --chart-forecast: #7c74f0;
+  --chart-band: rgba(99, 91, 240, 0.16);
+  --chart-count: #0d9488;
+  --chart-grid: #e6ebf2;
+  --chart-axis: #7a8699;
+
+  --radius: 0.5rem;
+
+  --sidebar: #ffffff;
+  --sidebar-foreground: #1a1f36;
+  --sidebar-primary: #4f46e5;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f1f4f9;
+  --sidebar-accent-foreground: #2b3350;
+  --sidebar-border: #e2e7ef;
+  --sidebar-ring: #4f46e5;
 }
 
 .dark {
-  --background: oklch(0.09 0.01 240);
-  --foreground: oklch(0.98 0.002 240);
-  --card: oklch(0.12 0.015 240);
-  --card-foreground: oklch(0.98 0.002 240);
-  --popover: oklch(0.12 0.015 240);
-  --popover-foreground: oklch(0.98 0.002 240);
-  --primary: oklch(0.65 0.25 250);
-  --primary-foreground: oklch(0.09 0.01 240);
-  --secondary: oklch(0.2 0.03 250);
-  --secondary-foreground: oklch(0.98 0.002 240);
-  --muted: oklch(0.18 0.02 240);
-  --muted-foreground: oklch(0.6 0.02 240);
-  --accent: oklch(0.22 0.03 200);
-  --accent-foreground: oklch(0.98 0.002 240);
-  --destructive: oklch(0.5 0.2 25);
-  --destructive-foreground: oklch(0.98 0.002 240);
-  --border: oklch(0.22 0.03 240);
-  --input: oklch(0.22 0.03 240);
-  --ring: oklch(0.65 0.25 250);
-  --chart-1: oklch(0.6 0.25 250);
-  --chart-2: oklch(0.65 0.22 200);
-  --chart-3: oklch(0.7 0.2 280);
-  --chart-4: oklch(0.75 0.18 180);
-  --chart-5: oklch(0.8 0.16 320);
-  --sidebar: oklch(0.12 0.015 240);
-  --sidebar-foreground: oklch(0.98 0.002 240);
-  --sidebar-primary: oklch(0.65 0.25 250);
-  --sidebar-primary-foreground: oklch(0.09 0.01 240);
-  --sidebar-accent: oklch(0.2 0.03 250);
-  --sidebar-accent-foreground: oklch(0.98 0.002 240);
-  --sidebar-border: oklch(0.22 0.03 240);
-  --sidebar-ring: oklch(0.4 0.05 240);
+  --background: #0b1020;
+  --foreground: #e7ecf7;
+  --card: #131a2c;
+  --card-foreground: #e7ecf7;
+  --popover: #161e33;
+  --popover-foreground: #e7ecf7;
+
+  --primary: #8b90ff;
+  --primary-foreground: #10142a;
+
+  --secondary: #1e2740;
+  --secondary-foreground: #d5dcec;
+  --muted: #1a2237;
+  --muted-foreground: #94a1bb;
+  --accent: #1e2740;
+  --accent-foreground: #d5dcec;
+  --destructive: #f2635f;
+  --destructive-foreground: #1a0f10;
+
+  --border: #253049;
+  --input: #2c3854;
+  --ring: #8b90ff;
+
+  --status-draft: #9aa8bf;
+  --status-draft-surface: #1c2437;
+  --status-sent: #7aa7ff;
+  --status-sent-surface: #14203a;
+  --status-accepted: #4ade9f;
+  --status-accepted-surface: #0e2a22;
+  --status-rejected: #ff8095;
+  --status-rejected-surface: #2c1420;
+  --status-expired: #f5be5c;
+  --status-expired-surface: #2a2011;
+
+  --chart-actual: #8b90ff;
+  --chart-actual-soft: #3b3f80;
+  --chart-forecast: #a5a3ff;
+  --chart-band: rgba(139, 144, 255, 0.2);
+  --chart-count: #3ec9b6;
+  --chart-grid: #222c44;
+  --chart-axis: #8090ab;
+
+  --sidebar: #0e1426;
+  --sidebar-foreground: #e7ecf7;
+  --sidebar-primary: #8b90ff;
+  --sidebar-primary-foreground: #10142a;
+  --sidebar-accent: #1b2338;
+  --sidebar-accent-foreground: #d5dcec;
+  --sidebar-border: #222c44;
+  --sidebar-ring: #8b90ff;
 }
 
 @theme inline {
-  --font-sans: "Geist", "Geist Fallback";
-  --font-mono: "Geist Mono", "Geist Mono Fallback";
+  /* 和文が混じるため、日本語フォントを明示的に後段に置く */
+  --font-sans:
+    "Geist", "Geist Fallback", "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+    "Noto Sans JP", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+  --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -97,15 +148,27 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-status-draft: var(--status-draft);
+  --color-status-draft-surface: var(--status-draft-surface);
+  --color-status-sent: var(--status-sent);
+  --color-status-sent-surface: var(--status-sent-surface);
+  --color-status-accepted: var(--status-accepted);
+  --color-status-accepted-surface: var(--status-accepted-surface);
+  --color-status-rejected: var(--status-rejected);
+  --color-status-rejected-surface: var(--status-rejected-surface);
+  --color-status-expired: var(--status-expired);
+  --color-status-expired-surface: var(--status-expired-surface);
+
+  --color-chart-actual: var(--chart-actual);
+  --color-chart-forecast: var(--chart-forecast);
+  --color-chart-count: var(--chart-count);
+
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 6px);
+
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -118,9 +181,70 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ブラウザ既定のままにしない部分。ここを揃えると「組まれている」感が出る */
+  ::selection {
+    background: color-mix(in oklab, var(--primary) 22%, transparent);
+    color: var(--foreground);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--muted-foreground) 35%, transparent)
+      transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in oklab, var(--muted-foreground) 32%, transparent);
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in oklab, var(--muted-foreground) 52%, transparent);
+    background-clip: content-box;
+  }
+}
+
+@layer utilities {
+  /* 金額・件数など桁を比較する数字は必ず等幅数字にする */
+  .tabular {
+    font-variant-numeric: tabular-nums lining-nums;
+    font-feature-settings: "tnum" 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

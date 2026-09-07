@@ -179,5 +179,6 @@ cython_debug/
 .pypirc
 
 # Local-only files
+.impeccable/
 .env.local
 *.local.md

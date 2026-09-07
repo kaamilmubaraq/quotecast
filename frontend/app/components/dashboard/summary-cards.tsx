@@ -1,11 +1,5 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { TrendingUp, FileText, DollarSign } from "lucide-react";
+import { useFormatters, useI18n } from "@/i18n";
+import type { TranslationKey } from "@/i18n/dictionary";
 
 interface SummaryCardsProps {
   totalCount: number;
@@ -14,81 +8,46 @@ interface SummaryCardsProps {
   averageAmount: number;
 }
 
+interface Tile {
+  labelKey: TranslationKey;
+  value: string;
+}
+
+/**
+ * 主要指標のタイル
+ *
+ * 数字を主役にするため、ラベルは小さく上に置き、値は等幅数字で揃える。
+ * 桁の違う金額が縦に並んでも視線が滑らないようにするのが狙い。
+ */
 export function SummaryCards({
   totalCount,
   currentMonthCount,
   totalAmount,
   averageAmount,
 }: SummaryCardsProps) {
+  const { t } = useI18n();
+  const { currency, number } = useFormatters();
+
+  const tiles: Tile[] = [
+    { labelKey: "dashboard.totalCount", value: number(totalCount) },
+    {
+      labelKey: "dashboard.currentMonthCount",
+      value: number(currentMonthCount),
+    },
+    { labelKey: "dashboard.totalAmount", value: currency(totalAmount) },
+    { labelKey: "dashboard.averageAmount", value: currency(averageAmount) },
+  ];
+
   return (
-    <div className="grid md:grid-cols-4 gap-6 mb-8">
-      <Card className="border-none shadow-lg bg-gradient-to-br from-blue-50 to-white">
-        <CardHeader className="pb-3">
-          <CardDescription className="text-blue-600 font-medium">
-            総見積もり件数
-          </CardDescription>
-          <CardTitle className="text-4xl font-bold text-blue-900">
-            {totalCount}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center text-sm text-blue-600">
-            <FileText className="w-4 h-4 mr-1" />
-            全期間
+    <div className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-border bg-border lg:grid-cols-4">
+      {tiles.map(({ labelKey, value }) => (
+        <div key={labelKey} className="bg-card px-4 py-3.5">
+          <div className="text-xs text-muted-foreground">{t(labelKey)}</div>
+          <div className="mt-1 truncate text-xl font-semibold tracking-tight tabular">
+            {value}
           </div>
-        </CardContent>
-      </Card>
-
-      <Card className="border-none shadow-lg bg-gradient-to-br from-green-50 to-white">
-        <CardHeader className="pb-3">
-          <CardDescription className="text-green-600 font-medium">
-            今月の見積もり
-          </CardDescription>
-          <CardTitle className="text-4xl font-bold text-green-900">
-            {currentMonthCount}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center text-sm text-green-600">
-            <TrendingUp className="w-4 h-4 mr-1" />
-            今月
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="border-none shadow-lg bg-gradient-to-br from-purple-50 to-white">
-        <CardHeader className="pb-3">
-          <CardDescription className="text-purple-600 font-medium">
-            総見積もり金額
-          </CardDescription>
-          <CardTitle className="text-3xl font-bold text-purple-900">
-            ¥{totalAmount.toLocaleString()}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center text-sm text-purple-600">
-            <DollarSign className="w-4 h-4 mr-1" />
-            全期間
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="border-none shadow-lg bg-gradient-to-br from-amber-50 to-white">
-        <CardHeader className="pb-3">
-          <CardDescription className="text-amber-600 font-medium">
-            平均見積もり金額
-          </CardDescription>
-          <CardTitle className="text-3xl font-bold text-amber-900">
-            ¥{Math.round(averageAmount).toLocaleString()}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center text-sm text-amber-600">
-            <TrendingUp className="w-4 h-4 mr-1" />
-            1件あたり
-          </div>
-        </CardContent>
-      </Card>
+        </div>
+      ))}
     </div>
   );
 }

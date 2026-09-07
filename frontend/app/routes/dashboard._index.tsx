@@ -1,6 +1,10 @@
-import PageHeader from "@/components/page-header";
-import { SummaryCards, MonthlyTrendChart } from "@/components/dashboard";
+import {
+  AnalyticsSection,
+  MonthlyTrendChart,
+  SummaryCards,
+} from "@/components/dashboard";
 import { useDashboardData } from "@/hooks/use-dashboard-data";
+import { useI18n } from "@/i18n";
 
 export default function DashboardPage() {
   const {
@@ -14,21 +18,26 @@ export default function DashboardPage() {
     showForecast,
     monthsAhead,
     trendAnalysis,
+    selectedModel,
+    backtestMase,
     handleForecastToggle,
     handleMonthsAheadChange,
     handlePeriodChange,
   } = useDashboardData();
+  const { t } = useI18n();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      <PageHeader
-        title="ダッシュボード"
-        description="見積もりの統計と分析"
-        showBackButton={true}
-        backLink="/estimates"
-      />
+    <div className="mx-auto max-w-[88rem] px-4 py-6 sm:px-6">
+      <header className="mb-5">
+        <h1 className="text-lg font-semibold tracking-tight">
+          {t("dashboard.title")}
+        </h1>
+        <p className="mt-0.5 text-sm text-muted-foreground">
+          {t("dashboard.description")}
+        </p>
+      </header>
 
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <div className="space-y-4">
         <SummaryCards
           totalCount={totalCount}
           currentMonthCount={currentMonthCount}
@@ -44,9 +53,18 @@ export default function DashboardPage() {
           showForecast={showForecast}
           monthsAhead={monthsAhead}
           trendAnalysis={trendAnalysis}
+          selectedModel={selectedModel}
+          backtestMase={backtestMase}
           onForecastToggle={handleForecastToggle}
           onMonthsAheadChange={handleMonthsAheadChange}
         />
+
+        <section className="pt-2">
+          <h2 className="mb-3 text-sm font-semibold tracking-tight">
+            {t("analytics.title")}
+          </h2>
+          <AnalyticsSection />
+        </section>
       </div>
     </div>
   );

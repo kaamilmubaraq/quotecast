@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Plus, BarChart3, Search } from "lucide-react";
+import { Plus, Search, X } from "lucide-react";
 import { CreateEstimateDialog } from "@/components/estimate/create-estimate-dialog";
 import { EstimateFilter } from "@/components/estimate/estimate-filter";
+import { useI18n } from "@/i18n";
 import type { EstimateFilters } from "@/lib/types";
 
 interface EstimateHeaderProps {
@@ -21,39 +19,47 @@ export const EstimateHeader = ({
   onFiltersChange,
 }: EstimateHeaderProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { t } = useI18n();
 
   return (
     <>
-      <div className="flex items-center justify-between mb-6 gap-4">
-        <div className="flex items-center gap-3 flex-1">
-          <div className="relative w-96">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <Input
-              placeholder="プロジェクト名・顧客名で検索"
-              value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-10 bg-white"
-            />
-          </div>
-          <EstimateFilter filters={filters} onFiltersChange={onFiltersChange} />
+      <div className="mb-4 flex flex-wrap items-center gap-2">
+        <div className="relative min-w-56 flex-1 sm:max-w-80">
+          <Search
+            aria-hidden
+            className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+            strokeWidth={2}
+          />
+          <input
+            type="search"
+            value={searchQuery}
+            onChange={(event) => onSearchChange(event.target.value)}
+            placeholder={t("estimates.searchPlaceholder")}
+            aria-label={t("action.search")}
+            className="h-8 w-full rounded-md border border-input bg-card pl-8 pr-8 text-sm placeholder:text-muted-foreground focus-visible:border-ring"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => onSearchChange("")}
+              aria-label={t("action.clear")}
+              className="absolute right-1.5 top-1/2 grid size-5 -translate-y-1/2 place-items-center rounded text-muted-foreground hover:text-foreground"
+            >
+              <X className="size-3.5" strokeWidth={2} />
+            </button>
+          )}
         </div>
 
-        <div className="flex items-center gap-3">
-          <Button asChild variant="outline">
-            <Link to="/dashboard">
-              <BarChart3 className="w-4 h-4 mr-2" />
-              ダッシュボード
-            </Link>
-          </Button>
-          <Button
-            onClick={() => setIsModalOpen(true)}
-            size="default"
-            className="font-medium"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            新規作成
-          </Button>
-        </div>
+        <EstimateFilter filters={filters} onFiltersChange={onFiltersChange} />
+
+        <button
+          type="button"
+          onClick={() => setIsModalOpen(true)}
+          className="ml-auto flex h-8 items-center gap-1.5 rounded-md bg-primary px-3 text-xs font-medium text-primary-foreground transition-opacity duration-150 hover:opacity-90"
+        >
+          <Plus className="size-3.5" strokeWidth={2.5} />
+          {t("action.newEstimate")}
+        </button>
       </div>
 
       <CreateEstimateDialog open={isModalOpen} onOpenChange={setIsModalOpen} />

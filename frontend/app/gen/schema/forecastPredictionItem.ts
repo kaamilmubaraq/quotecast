@@ -10,4 +10,6 @@ export interface ForecastPredictionItem {
   predicted_amount: number;
   predicted_count: number;
   confidence: number;
+  lower_amount?: number;
+  upper_amount?: number;
 }

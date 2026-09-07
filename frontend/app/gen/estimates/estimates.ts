@@ -26,6 +26,7 @@ import type {
   CreateEstimateRequest,
   CreateEstimateResponse,
   GetEstimateResponse,
+  GetEstimatesApiEstimatesGetParams,
   GetEstimatesResponse,
   UpdateEstimateRequest,
   UpdateEstimateResponse,
@@ -40,40 +41,47 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
  * @summary 見積もり一覧取得
  */
 export const getEstimatesApiEstimatesGet = (
+  params?: GetEstimatesApiEstimatesGetParams,
   options?: SecondParameter<typeof kyInstance>,
   signal?: AbortSignal,
 ) => {
   return kyInstance<GetEstimatesResponse>(
-    { url: `/api/estimates`, method: "GET", signal },
+    { url: `/api/estimates`, method: "GET", params, signal },
     options,
   );
 };
 
-export const getGetEstimatesApiEstimatesGetQueryKey = () => {
-  return [`/api/estimates`] as const;
+export const getGetEstimatesApiEstimatesGetQueryKey = (
+  params?: GetEstimatesApiEstimatesGetParams,
+) => {
+  return [`/api/estimates`, ...(params ? [params] : [])] as const;
 };
 
 export const getGetEstimatesApiEstimatesGetQueryOptions = <
   TData = Awaited<ReturnType<typeof getEstimatesApiEstimatesGet>>,
   TError = ErrorType<unknown>,
->(options?: {
-  query?: Partial<
-    UseQueryOptions<
-      Awaited<ReturnType<typeof getEstimatesApiEstimatesGet>>,
-      TError,
-      TData
-    >
-  >;
-  request?: SecondParameter<typeof kyInstance>;
-}) => {
+>(
+  params?: GetEstimatesApiEstimatesGetParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEstimatesApiEstimatesGet>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof kyInstance>;
+  },
+) => {
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
-    queryOptions?.queryKey ?? getGetEstimatesApiEstimatesGetQueryKey();
+    queryOptions?.queryKey ?? getGetEstimatesApiEstimatesGetQueryKey(params);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof getEstimatesApiEstimatesGet>>
-  > = ({ signal }) => getEstimatesApiEstimatesGet(requestOptions, signal);
+  > = ({ signal }) =>
+    getEstimatesApiEstimatesGet(params, requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof getEstimatesApiEstimatesGet>>,
@@ -91,6 +99,7 @@ export function useGetEstimatesApiEstimatesGet<
   TData = Awaited<ReturnType<typeof getEstimatesApiEstimatesGet>>,
   TError = ErrorType<unknown>,
 >(
+  params: undefined | GetEstimatesApiEstimatesGetParams,
   options: {
     query: Partial<
       UseQueryOptions<
@@ -117,6 +126,7 @@ export function useGetEstimatesApiEstimatesGet<
   TData = Awaited<ReturnType<typeof getEstimatesApiEstimatesGet>>,
   TError = ErrorType<unknown>,
 >(
+  params?: GetEstimatesApiEstimatesGetParams,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -143,6 +153,7 @@ export function useGetEstimatesApiEstimatesGet<
   TData = Awaited<ReturnType<typeof getEstimatesApiEstimatesGet>>,
   TError = ErrorType<unknown>,
 >(
+  params?: GetEstimatesApiEstimatesGetParams,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -165,6 +176,7 @@ export function useGetEstimatesApiEstimatesGet<
   TData = Awaited<ReturnType<typeof getEstimatesApiEstimatesGet>>,
   TError = ErrorType<unknown>,
 >(
+  params?: GetEstimatesApiEstimatesGetParams,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -179,7 +191,10 @@ export function useGetEstimatesApiEstimatesGet<
 ): UseQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData, TError>;
 } {
-  const queryOptions = getGetEstimatesApiEstimatesGetQueryOptions(options);
+  const queryOptions = getGetEstimatesApiEstimatesGetQueryOptions(
+    params,
+    options,
+  );
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,
@@ -199,6 +214,7 @@ export const prefetchGetEstimatesApiEstimatesGetQuery = async <
   TError = ErrorType<unknown>,
 >(
   queryClient: QueryClient,
+  params?: GetEstimatesApiEstimatesGetParams,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -210,7 +226,10 @@ export const prefetchGetEstimatesApiEstimatesGetQuery = async <
     request?: SecondParameter<typeof kyInstance>;
   },
 ): Promise<QueryClient> => {
-  const queryOptions = getGetEstimatesApiEstimatesGetQueryOptions(options);
+  const queryOptions = getGetEstimatesApiEstimatesGetQueryOptions(
+    params,
+    options,
+  );
 
   await queryClient.prefetchQuery(queryOptions);
 
@@ -220,24 +239,28 @@ export const prefetchGetEstimatesApiEstimatesGetQuery = async <
 export const getGetEstimatesApiEstimatesGetSuspenseQueryOptions = <
   TData = Awaited<ReturnType<typeof getEstimatesApiEstimatesGet>>,
   TError = ErrorType<unknown>,
->(options?: {
-  query?: Partial<
-    UseSuspenseQueryOptions<
-      Awaited<ReturnType<typeof getEstimatesApiEstimatesGet>>,
-      TError,
-      TData
-    >
-  >;
-  request?: SecondParameter<typeof kyInstance>;
-}) => {
+>(
+  params?: GetEstimatesApiEstimatesGetParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof getEstimatesApiEstimatesGet>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof kyInstance>;
+  },
+) => {
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
-    queryOptions?.queryKey ?? getGetEstimatesApiEstimatesGetQueryKey();
+    queryOptions?.queryKey ?? getGetEstimatesApiEstimatesGetQueryKey(params);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof getEstimatesApiEstimatesGet>>
-  > = ({ signal }) => getEstimatesApiEstimatesGet(requestOptions, signal);
+  > = ({ signal }) =>
+    getEstimatesApiEstimatesGet(params, requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
     Awaited<ReturnType<typeof getEstimatesApiEstimatesGet>>,
@@ -255,6 +278,7 @@ export function useGetEstimatesApiEstimatesGetSuspense<
   TData = Awaited<ReturnType<typeof getEstimatesApiEstimatesGet>>,
   TError = ErrorType<unknown>,
 >(
+  params: undefined | GetEstimatesApiEstimatesGetParams,
   options: {
     query: Partial<
       UseSuspenseQueryOptions<
@@ -273,6 +297,7 @@ export function useGetEstimatesApiEstimatesGetSuspense<
   TData = Awaited<ReturnType<typeof getEstimatesApiEstimatesGet>>,
   TError = ErrorType<unknown>,
 >(
+  params?: GetEstimatesApiEstimatesGetParams,
   options?: {
     query?: Partial<
       UseSuspenseQueryOptions<
@@ -291,6 +316,7 @@ export function useGetEstimatesApiEstimatesGetSuspense<
   TData = Awaited<ReturnType<typeof getEstimatesApiEstimatesGet>>,
   TError = ErrorType<unknown>,
 >(
+  params?: GetEstimatesApiEstimatesGetParams,
   options?: {
     query?: Partial<
       UseSuspenseQueryOptions<
@@ -313,6 +339,7 @@ export function useGetEstimatesApiEstimatesGetSuspense<
   TData = Awaited<ReturnType<typeof getEstimatesApiEstimatesGet>>,
   TError = ErrorType<unknown>,
 >(
+  params?: GetEstimatesApiEstimatesGetParams,
   options?: {
     query?: Partial<
       UseSuspenseQueryOptions<
@@ -327,8 +354,10 @@ export function useGetEstimatesApiEstimatesGetSuspense<
 ): UseSuspenseQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData, TError>;
 } {
-  const queryOptions =
-    getGetEstimatesApiEstimatesGetSuspenseQueryOptions(options);
+  const queryOptions = getGetEstimatesApiEstimatesGetSuspenseQueryOptions(
+    params,
+    options,
+  );
 
   const query = useSuspenseQuery(
     queryOptions,
@@ -960,6 +989,111 @@ export const useDeleteEstimateApiEstimatesEstimateIdDelete = <
 > => {
   const mutationOptions =
     getDeleteEstimateApiEstimatesEstimateIdDeleteMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary 見積もり複製
+ */
+export const duplicateEstimateApiEstimatesEstimateIdDuplicatePost = (
+  estimateId: string,
+  options?: SecondParameter<typeof kyInstance>,
+  signal?: AbortSignal,
+) => {
+  return kyInstance<CreateEstimateResponse>(
+    { url: `/api/estimates/${estimateId}/duplicate`, method: "POST", signal },
+    options,
+  );
+};
+
+export const getDuplicateEstimateApiEstimatesEstimateIdDuplicatePostMutationOptions =
+  <TError = ErrorType<unknown>, TContext = unknown>(options?: {
+    mutation?: UseMutationOptions<
+      Awaited<
+        ReturnType<typeof duplicateEstimateApiEstimatesEstimateIdDuplicatePost>
+      >,
+      TError,
+      { estimateId: string },
+      TContext
+    >;
+    request?: SecondParameter<typeof kyInstance>;
+  }): UseMutationOptions<
+    Awaited<
+      ReturnType<typeof duplicateEstimateApiEstimatesEstimateIdDuplicatePost>
+    >,
+    TError,
+    { estimateId: string },
+    TContext
+  > => {
+    const mutationKey = [
+      "duplicateEstimateApiEstimatesEstimateIdDuplicatePost",
+    ];
+    const { mutation: mutationOptions, request: requestOptions } = options
+      ? options.mutation &&
+        "mutationKey" in options.mutation &&
+        options.mutation.mutationKey
+        ? options
+        : { ...options, mutation: { ...options.mutation, mutationKey } }
+      : { mutation: { mutationKey }, request: undefined };
+
+    const mutationFn: MutationFunction<
+      Awaited<
+        ReturnType<typeof duplicateEstimateApiEstimatesEstimateIdDuplicatePost>
+      >,
+      { estimateId: string }
+    > = (props) => {
+      const { estimateId } = props ?? {};
+
+      return duplicateEstimateApiEstimatesEstimateIdDuplicatePost(
+        estimateId,
+        requestOptions,
+      );
+    };
+
+    return { mutationFn, ...mutationOptions };
+  };
+
+export type DuplicateEstimateApiEstimatesEstimateIdDuplicatePostMutationResult =
+  NonNullable<
+    Awaited<
+      ReturnType<typeof duplicateEstimateApiEstimatesEstimateIdDuplicatePost>
+    >
+  >;
+
+export type DuplicateEstimateApiEstimatesEstimateIdDuplicatePostMutationError =
+  ErrorType<unknown>;
+
+/**
+ * @summary 見積もり複製
+ */
+export const useDuplicateEstimateApiEstimatesEstimateIdDuplicatePost = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<
+        ReturnType<typeof duplicateEstimateApiEstimatesEstimateIdDuplicatePost>
+      >,
+      TError,
+      { estimateId: string },
+      TContext
+    >;
+    request?: SecondParameter<typeof kyInstance>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<
+    ReturnType<typeof duplicateEstimateApiEstimatesEstimateIdDuplicatePost>
+  >,
+  TError,
+  { estimateId: string },
+  TContext
+> => {
+  const mutationOptions =
+    getDuplicateEstimateApiEstimatesEstimateIdDuplicatePostMutationOptions(
+      options,
+    );
 
   return useMutation(mutationOptions, queryClient);
 };

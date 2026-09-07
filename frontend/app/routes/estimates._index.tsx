@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { EstimateHeader, EstimateList } from "@/components/estimate";
-import PageHeader from "@/components/page-header";
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
+import { useI18n } from "@/i18n";
 import type { EstimateFilters } from "@/lib/types";
 
 const INITIAL_FILTERS: EstimateFilters = {
@@ -14,24 +15,28 @@ const INITIAL_FILTERS: EstimateFilters = {
 export default function EstimatesPage() {
   const [filters, setFilters] = useState<EstimateFilters>(INITIAL_FILTERS);
   const [searchQuery, setSearchQuery] = useState("");
+  // 入力のたびに問い合わせないよう、検索語は落ち着いてから送る
+  const debouncedSearch = useDebouncedValue(searchQuery, 300);
+  const { t } = useI18n();
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <PageHeader
-        title="見積もり一覧"
-        description="作成された見積もりの管理"
-        showSystemIcon={true}
-      />
+    <div className="mx-auto max-w-[88rem] px-4 py-6 sm:px-6">
+      <header className="mb-5">
+        <h1 className="text-lg font-semibold tracking-tight">
+          {t("estimates.title")}
+        </h1>
+        <p className="mt-0.5 text-sm text-muted-foreground">
+          {t("estimates.description")}
+        </p>
+      </header>
 
-      <div className="container mx-auto px-4 py-8">
-        <EstimateHeader
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          filters={filters}
-          onFiltersChange={setFilters}
-        />
-        <EstimateList searchQuery={searchQuery} filters={filters} />
-      </div>
+      <EstimateHeader
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        filters={filters}
+        onFiltersChange={setFilters}
+      />
+      <EstimateList searchQuery={debouncedSearch} filters={filters} />
     </div>
   );
 }

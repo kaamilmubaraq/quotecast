@@ -6,9 +6,12 @@
  */
 import type { ForecastHistoricalItem } from "./forecastHistoricalItem";
 import type { ForecastPredictionItem } from "./forecastPredictionItem";
+import type { MonthlyForecastResponseBacktestMase } from "./monthlyForecastResponseBacktestMase";
 
 export interface MonthlyForecastResponse {
   historical_data: ForecastHistoricalItem[];
   predictions: ForecastPredictionItem[];
   trend_analysis: string;
+  selected_model?: string;
+  backtest_mase?: MonthlyForecastResponseBacktestMase;
 }
