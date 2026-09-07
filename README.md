@@ -20,8 +20,10 @@ QuoteCast is a full-stack quotation (見積もり) management system for a sales
 | **Quotations** | Create, edit and delete quotations with line items, categories and drag-to-reorder groups |
 | **PDF** | Renders a print-ready quotation PDF in the browser, with live preview |
 | **Dashboard** | Monthly revenue/volume trends, summary cards, period selector |
-| **Forecasting** | Projects future quotation volume and value, with 95% prediction intervals |
-| **Filtering** | Filter the quotation list by status, issue date and expiry date |
+| **Forecasting** | Projects future quotation volume and value, with 95% prediction intervals shown as a band on the chart |
+| **Analytics** | Win rate, pipeline value, status breakdown, top customers, and quotations expiring soon |
+| **Filtering** | Server-side search plus status and date filters, with a validity bar showing days remaining |
+| **Bilingual & themed** | Japanese by default with a first-class English toggle, and light/dark themes as equals |
 
 The part worth reading the code for is the forecasting engine.
 
@@ -58,6 +60,11 @@ shown in the UI is derived from the relative width of the 95% interval, so it fa
 horizon extends and as a series gets noisier.
 
 **5. The forecast is deterministic.** The same history always produces the same numbers.
+
+**6. The workings are visible.** The dashboard shows which model was selected and how it scored
+against the naive benchmark (e.g. `Theta法 · MASE 0.92`), and draws the 95% interval as a band
+behind the forecast bars. Actuals are solid; forecasts are hatched and outlined, so the two never
+blur together even in greyscale.
 
 ### Does it actually work?
 
@@ -137,6 +144,21 @@ branch coverage and reusable outside this project.
 [Orval](https://orval.dev/) generates typed React Query hooks from it. A backend response shape
 change becomes a frontend compile error rather than a runtime surprise. `app/gen/` is regenerated
 with `make gen` and never edited by hand.
+
+---
+
+## Design
+
+Two documents record the decisions rather than leaving them implicit in the code:
+
+- **[PRODUCT.md](./PRODUCT.md)** — who the product is for, what it makes possible, and the
+  constraints future work must preserve.
+- **[DESIGN.md](./DESIGN.md)** — the token system, typography and layout rules, component states,
+  motion budget, i18n constraints, and the accessibility floor.
+
+The short version: this is an Operate surface, so expression never obscures the task. Colour is
+reserved for state and never carries meaning alone, every comparable number is set in tabular
+figures, and light and dark are designed as peers rather than one being a filter over the other.
 
 ---
 
