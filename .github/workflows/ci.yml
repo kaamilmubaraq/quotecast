@@ -76,5 +76,9 @@ jobs:
       - name: Lint
         run: yarn lint
 
+      # ルート型は .react-router/ に生成される（gitignore対象のため CI で生成が必要）
+      - name: Generate route types
+        run: yarn react-router typegen
+
       - name: Type check
         run: yarn tsc -b
